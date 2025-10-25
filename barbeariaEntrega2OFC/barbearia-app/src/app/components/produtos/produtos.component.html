@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="page-header">
+    <h2>🛍️ Produtos</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Produto' }}
+    </button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoProduto ? 'Editar Produto' : 'Cadastrar Novo Produto' }}</h3>
+    <form (ngSubmit)="cadastrarProduto()">
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="produto.nome" 
+               placeholder="Mínimo 3 letras" minlength="3" required>
+        <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="descricao">Descrição:</label>
+        <input class="form-input" type="text" id="descricao" name="descricao" [(ngModel)]="produto.descricao" 
+               placeholder="Descreva o produto" required>
+        <div *ngIf="erros.descricao" class="error-message">{{ erros.descricao }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="preco">Preço:</label>
+        <input class="form-input" type="number" id="preco" name="preco" [(ngModel)]="produto.preco" 
+               placeholder="Valor maior que zero" step="0.01" min="0.01" required>
+        <div *ngIf="erros.preco" class="error-message">{{ erros.preco }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="quantidadeEstoque">Quantidade em Estoque:</label>
+        <input class="form-input" type="number" id="quantidadeEstoque" name="quantidadeEstoque" [(ngModel)]="produto.quantidadeEstoque" 
+               placeholder="Pode ser 0" min="0" required>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoProduto ? '✏️ Atualizar' : '💾 Salvar' }} Produto</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="produtos-grid">
+    <div *ngFor="let p of produtos" class="produto-card card fade-in-up">
+      <div class="produto-icon">🛍️</div>
+      <h4>{{ p.nome }}</h4>
+      <div class="produto-info">
+        <p>📝 {{ p.descricao }}</p>
+        <p>💰 R$ {{ p.preco }}</p>
+        <p>📦 {{ p.quantidadeEstoque }} unidades</p>
+      </div>
+      <div class="produto-actions">
+        <button class="btn btn-edit" (click)="editarProduto(p)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarProduto(p)">🗑️ Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>

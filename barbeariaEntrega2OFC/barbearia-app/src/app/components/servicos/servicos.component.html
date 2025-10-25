@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="page-header">
+    <h2>✂️ Serviços</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Serviço' }}
+    </button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoServico ? 'Editar Serviço' : 'Cadastrar Novo Serviço' }}</h3>
+    <form (ngSubmit)="cadastrarServico()">
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="servico.nome" 
+               placeholder="Mínimo 3 letras" minlength="3" required>
+        <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="descricao">Descrição:</label>
+        <input class="form-input" type="text" id="descricao" name="descricao" [(ngModel)]="servico.descricao" 
+               placeholder="Descreva o serviço" required>
+        <div *ngIf="erros.descricao" class="error-message">{{ erros.descricao }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="preco">Preço:</label>
+        <input class="form-input" type="number" id="preco" name="preco" [(ngModel)]="servico.preco" 
+               placeholder="Valor maior que zero" step="0.01" min="0.01" required>
+        <div *ngIf="erros.preco" class="error-message">{{ erros.preco }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="duracaoMinutos">Duração (minutos):</label>
+        <input class="form-input" type="number" id="duracaoMinutos" name="duracaoMinutos" [(ngModel)]="servico.duracaoMinutos" 
+               placeholder="Mínimo 20 minutos" min="20" required>
+        <div *ngIf="erros.duracaoMinutos" class="error-message">{{ erros.duracaoMinutos }}</div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoServico ? '✏️ Atualizar' : '💾 Salvar' }} Serviço</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="servicos-grid">
+    <div *ngFor="let s of servicos" class="servico-card card fade-in-up">
+      <div class="servico-icon">✂️</div>
+      <h4>{{ s.nome }}</h4>
+      <div class="servico-info">
+        <p>📝 {{ s.descricao }}</p>
+        <p>💰 R$ {{ s.preco }}</p>
+        <p>⏱️ {{ s.duracaoMinutos }} minutos</p>
+      </div>
+      <div class="servico-actions">
+        <button class="btn btn-edit" (click)="editarServico(s)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarServico(s)">🗑️ Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>

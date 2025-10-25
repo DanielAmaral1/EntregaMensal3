@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="page-header">
+    <h2>👨💼 Funcionários</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Funcionário' }}
+    </button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoFuncionario ? 'Editar Funcionário' : 'Cadastrar Novo Funcionário' }}</h3>
+    <form (ngSubmit)="cadastrarFuncionario()">
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="funcionario.nome" 
+               placeholder="Mínimo 3 letras" minlength="3" required>
+        <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="telefone">Telefone:</label>
+        <input class="form-input" type="tel" id="telefone" name="telefone" [(ngModel)]="funcionario.telefone" 
+               placeholder="Digite 11 números" maxlength="12" (input)="formatarTelefone($event)" required>
+        <div *ngIf="erros.telefone" class="error-message">{{ erros.telefone }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="endereco">Endereço:</label>
+        <input class="form-input" type="text" id="endereco" name="endereco" [(ngModel)]="funcionario.endereco" 
+               placeholder="Endereço completo" required>
+        <div *ngIf="erros.endereco" class="error-message">{{ erros.endereco }}</div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoFuncionario ? '✏️ Atualizar' : '💾 Salvar' }} Funcionário</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="funcionarios-grid">
+    <div *ngFor="let f of funcionarios" class="funcionario-card card fade-in-up">
+      <div class="funcionario-icon">👨💼</div>
+      <h4>{{ f.nome }}</h4>
+      <div class="funcionario-info">
+        <p>📱 {{ f.telefone }}</p>
+        <p>🏠 {{ f.endereco }}</p>
+      </div>
+      <div class="funcionario-actions">
+        <button class="btn btn-edit" (click)="editarFuncionario(f)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarFuncionario(f)">🗑️ Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>

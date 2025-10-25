@@ -1,0 +1,44 @@
+<h2>Produtos</h2>
+
+<div class="produto-actions">
+  <button class="btn-cadastrar" (click)="mostrarFormulario = !mostrarFormulario">
+    {{ mostrarFormulario ? 'Cancelar' : 'Cadastrar Produto' }}
+  </button>
+</div>
+
+<div *ngIf="mostrarFormulario" class="formulario-cadastro">
+  <h3>Cadastrar Novo Produto</h3>
+  <form (ngSubmit)="cadastrarProduto()">
+    <div class="campo">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" [(ngModel)]="produto.nome" required>
+    </div>
+    
+    <div class="campo">
+      <label for="descricao">Descrição:</label>
+      <input type="text" id="descricao" [(ngModel)]="produto.descricao" required>
+    </div>
+    
+    <div class="campo">
+      <label for="preco">Preço:</label>
+      <input type="number" id="preco" [(ngModel)]="produto.preco" step="0.01" required>
+    </div>
+    
+    <div class="campo">
+      <label for="quantidadeEstoque">Quantidade em Estoque:</label>
+      <input type="number" id="quantidadeEstoque" [(ngModel)]="produto.quantidadeEstoque" required>
+    </div>
+    
+    <button type="submit" class="btn-salvar">Salvar</button>
+  </form>
+</div>
+
+<div class="lista-produtos">
+  <h3>Produtos Cadastrados</h3>
+  <div *ngFor="let p of produtos" class="produto-item">
+    <p><strong>Nome:</strong> {{ p.nome }}</p>
+    <p><strong>Descrição:</strong> {{ p.descricao }}</p>
+    <p><strong>Preço:</strong> R$ {{ p.preco }}</p>
+    <p><strong>Estoque:</strong> {{ p.quantidadeEstoque }} unidades</p>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="page-header">
+    <h2>👥 Clientes</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Cliente' }}
+    </button>
+  </div>
+
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" 
+             class="search-input" 
+             placeholder="🔍 Pesquisar por nome, email, telefone ou idade..." 
+             [(ngModel)]="termoPesquisa" 
+             (input)="pesquisar()">
+      <button *ngIf="termoPesquisa" class="btn-clear" (click)="limparPesquisa()">❌</button>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoCliente ? 'Editar Cliente' : 'Cadastrar Novo Cliente' }}</h3>
+    <form (ngSubmit)="cadastrarCliente()">
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="cliente.nome" 
+               placeholder="Mínimo 3 letras" minlength="3" required>
+        <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="celular">Celular:</label>
+        <input class="form-input" type="tel" id="celular" name="celular" [(ngModel)]="cliente.celular" 
+               placeholder="Digite 11 números" maxlength="12" (input)="formatarCelular($event)" required>
+        <div *ngIf="erros.celular" class="error-message">{{ erros.celular }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="email">Email:</label>
+        <input class="form-input" type="email" id="email" name="email" [(ngModel)]="cliente.email" 
+               placeholder="exemplo@email.com" required>
+        <div *ngIf="erros.email" class="error-message">{{ erros.email }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="idade">Idade:</label>
+        <input class="form-input" type="number" id="idade" name="idade" [(ngModel)]="cliente.idade" 
+               placeholder="Entre 1 e 120" min="1" max="120" required>
+        <div *ngIf="erros.idade" class="error-message">{{ erros.idade }}</div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoCliente ? '✏️ Atualizar' : '💾 Salvar' }} Cliente</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="clientes-grid">
+    <div *ngFor="let c of clientesFiltrados" class="cliente-card card fade-in-up">
+      <div class="cliente-avatar">👤</div>
+      <h4>{{ c.nome }}</h4>
+      <div class="cliente-info">
+        <p>📱 {{ c.celular }}</p>
+        <p>✉️ {{ c.email }}</p>
+        <p>🎂 {{ c.idade }} anos</p>
+      </div>
+      <div class="cliente-actions">
+        <button class="btn btn-edit" (click)="editarCliente(c)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarCliente(c)">🗑️ Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,145 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  color: #e2e8f0;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.form-card {
+  margin-bottom: 2rem;
+}
+
+.form-card h3 {
+  color: #e2e8f0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.servico-card {
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.servico-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.servico-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.servico-card h4 {
+  color: #e2e8f0;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.servico-info p {
+  color: #a0aec0;
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.servico-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #212529;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+  background-color: #e0a800;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-radius: 0.25rem;
+  border-left: 3px solid #ff6b6b;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .servicos-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .servico-actions {
+    flex-direction: column;
+  }
+}

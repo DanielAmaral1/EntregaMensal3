@@ -75,4 +75,27 @@ class ClienteServiceTest {
         assertEquals(1, resultado.size());
         verify(clienteRepository, times(1)).findByNomeContaining(termo);
     }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao buscar cliente por ID inexistente")
+    void testFindByIdNotFound() {
+        when(clienteRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        Optional<Cliente> resultado = clienteService.findById(999L);
+        
+        assertFalse(resultado.isPresent());
+        verify(clienteRepository, times(1)).findById(999L);
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de sucesso ao deletar cliente")
+    void testDeleteClienteSuccess() {
+        doNothing().when(clienteRepository).deleteById(1L);
+        
+        clienteService.deleteById(1L);
+        
+        verify(clienteRepository, times(1)).deleteById(1L);
+    }
+
+
 }

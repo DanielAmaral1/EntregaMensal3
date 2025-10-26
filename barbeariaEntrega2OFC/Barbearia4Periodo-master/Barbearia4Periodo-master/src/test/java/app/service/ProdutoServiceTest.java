@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import jakarta.persistence.EntityNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,7 +42,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de sucesso ao salvar produto com estoque válido")
+    @DisplayName("TESTE DE UNIDADE - Cenário de sucesso ao salvar produto com estoque válido")
     void testSaveProdutoSuccess() {
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
         
@@ -54,7 +55,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário com erro de validation de estoque negativo")
+    @DisplayName("TESTE DE UNIDADE - Cenário com erro de validation de estoque negativo")
     void testSaveProdutoEstoqueNegativo() {
         produto.setQuantidadeEstoque(-5);
         when(produtoRepository.save(any(Produto.class))).thenAnswer(invocation -> {
@@ -72,7 +73,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de erro ao deletar produto com estoque")
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao deletar produto com estoque")
     void testDeleteProdutoComEstoque() {
         when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto));
         
@@ -85,7 +86,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por produtos com estoque baixo")
+    @DisplayName("TESTE DE UNIDADE - Cenário de busca por produtos com estoque baixo")
     void testBuscarProdutosEstoqueBaixo() {
         List<Produto> produtosBaixoEstoque = Arrays.asList(produto);
         when(produtoRepository.buscarProdutosComEstoqueBaixo(5)).thenReturn(produtosBaixoEstoque);
@@ -95,5 +96,45 @@ class ProdutoServiceTest {
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
         verify(produtoRepository, times(1)).buscarProdutosComEstoqueBaixo(5);
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao buscar produto por ID inexistente")
+    void testFindByIdNotFound() {
+        when(produtoRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        Optional<Produto> resultado = produtoService.findById(999L);
+        
+        assertFalse(resultado.isPresent());
+        verify(produtoRepository, times(1)).findById(999L);
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao atualizar produto inexistente")
+    void testUpdateProdutoNotFound() {
+        when(produtoRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            produtoService.update(999L, produto);
+        });
+        
+        assertEquals("Produto não encontrado com id: 999", exception.getMessage());
+        verify(produtoRepository, times(1)).findById(999L);
+        verify(produtoRepository, never()).save(any(Produto.class));
+    }
+
+
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de busca por preço sem resultados")
+    void testBuscarPorPrecoAteEmpty() {
+        BigDecimal preco = new BigDecimal("1.00");
+        when(produtoRepository.findByPrecoLessThanEqual(preco)).thenReturn(Arrays.asList());
+        
+        List<Produto> resultado = produtoService.buscarPorPrecoAte(preco);
+        
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(produtoRepository, times(1)).findByPrecoLessThanEqual(preco);
     }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestSimpleController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">TestSimpleController.java</span></div><h1>TestSimpleController.java</h1><pre class="source lang-java linenums">package app.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+
+@RestController
+@RequestMapping(&quot;/test-simple&quot;)
+<span class="fc" id="L9">public class TestSimpleController {</span>
+
+    @GetMapping(&quot;/funcionarios&quot;)
+    public ResponseEntity&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; getFuncionarios() {
+<span class="fc" id="L13">        List&lt;Map&lt;String, Object&gt;&gt; funcionarios = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L14">        Map&lt;String, Object&gt; func = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L15">        func.put(&quot;id_funcionario&quot;, 1L);</span>
+<span class="fc" id="L16">        func.put(&quot;nome&quot;, &quot;João Teste&quot;);</span>
+<span class="fc" id="L17">        func.put(&quot;telefone&quot;, &quot;11-999999999&quot;);</span>
+<span class="fc" id="L18">        func.put(&quot;endereco&quot;, &quot;Rua Teste, 123&quot;);</span>
+<span class="fc" id="L19">        funcionarios.add(func);</span>
+<span class="fc" id="L20">        return ResponseEntity.ok(funcionarios);</span>
+    }
+
+    @GetMapping(&quot;/produtos&quot;)
+    public ResponseEntity&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; getProdutos() {
+<span class="fc" id="L25">        List&lt;Map&lt;String, Object&gt;&gt; produtos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L26">        Map&lt;String, Object&gt; prod = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L27">        prod.put(&quot;id_produto&quot;, 1L);</span>
+<span class="fc" id="L28">        prod.put(&quot;nome&quot;, &quot;Produto Teste&quot;);</span>
+<span class="fc" id="L29">        prod.put(&quot;descricao&quot;, &quot;Descrição teste&quot;);</span>
+<span class="fc" id="L30">        prod.put(&quot;preco&quot;, 25.90);</span>
+<span class="fc" id="L31">        prod.put(&quot;quantidadeEstoque&quot;, 10);</span>
+<span class="fc" id="L32">        produtos.add(prod);</span>
+<span class="fc" id="L33">        return ResponseEntity.ok(produtos);</span>
+    }
+
+    @GetMapping(&quot;/servicos&quot;)
+    public ResponseEntity&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; getServicos() {
+<span class="fc" id="L38">        List&lt;Map&lt;String, Object&gt;&gt; servicos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L39">        Map&lt;String, Object&gt; serv = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L40">        serv.put(&quot;id_servico&quot;, 1L);</span>
+<span class="fc" id="L41">        serv.put(&quot;nome&quot;, &quot;Serviço Teste&quot;);</span>
+<span class="fc" id="L42">        serv.put(&quot;descricao&quot;, &quot;Descrição teste&quot;);</span>
+<span class="fc" id="L43">        serv.put(&quot;preco&quot;, 30.00);</span>
+<span class="fc" id="L44">        serv.put(&quot;duracaoMinutos&quot;, 45);</span>
+<span class="fc" id="L45">        servicos.add(serv);</span>
+<span class="fc" id="L46">        return ResponseEntity.ok(servicos);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

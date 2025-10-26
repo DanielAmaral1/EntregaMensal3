@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProdutoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">ProdutoService.java</span></div><h1>ProdutoService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import app.entity.Produto;
+import app.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
+
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L14">public class ProdutoService {</span>
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    public Produto save(Produto produto) {
+        // Regra de negócio: modificar objeto antes de persistir
+<span class="pc bpc" id="L21" title="1 of 4 branches missed.">        if (produto.getQuantidadeEstoque() == null || produto.getQuantidadeEstoque() &lt;= 0) {</span>
+<span class="fc" id="L22">            produto.setQuantidadeEstoque(0);</span>
+        }
+<span class="fc" id="L24">        return produtoRepository.save(produto);</span>
+    }
+
+    public List&lt;Produto&gt; findAll() {
+<span class="fc" id="L28">        return produtoRepository.findAll();</span>
+    }
+
+    public Optional&lt;Produto&gt; findById(Long id) {
+<span class="fc" id="L32">        return produtoRepository.findById(id);</span>
+    }
+
+    public Produto update(Long id, Produto produtoDetails) {
+<span class="fc" id="L36">        Produto produto = findById(id)</span>
+<span class="fc" id="L37">                .orElseThrow(() -&gt; new RuntimeException(&quot;Produto não encontrado com id: &quot; + id));</span>
+
+<span class="fc" id="L39">        produto.setNome(produtoDetails.getNome());</span>
+<span class="fc" id="L40">        produto.setDescricao(produtoDetails.getDescricao());</span>
+<span class="fc" id="L41">        produto.setPreco(produtoDetails.getPreco());</span>
+<span class="fc" id="L42">        produto.setQuantidadeEstoque(produtoDetails.getQuantidadeEstoque());</span>
+
+<span class="fc" id="L44">        return save(produto);</span>
+    }
+
+    public List&lt;Produto&gt; buscarPorPrecoAte(BigDecimal preco) {
+<span class="fc" id="L48">        return produtoRepository.findByPrecoLessThanEqual(preco);</span>
+    }
+
+    public void deleteById(Long id) {
+        // Regra de negócio complexa com exception
+<span class="fc" id="L53">        Optional&lt;Produto&gt; produto = findById(id);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (produto.isEmpty()) {</span>
+<span class="nc" id="L55">            throw new RuntimeException(&quot;Não é possível excluir produto inexistente&quot;);</span>
+        }
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (produto.get().getQuantidadeEstoque() &gt; 0) {</span>
+<span class="fc" id="L58">            throw new RuntimeException(&quot;Não é possível excluir produto com estoque disponível&quot;);</span>
+        }
+<span class="fc" id="L60">        produtoRepository.deleteById(id);</span>
+<span class="fc" id="L61">    }</span>
+
+    public List&lt;Produto&gt; buscarPorNome(String nome) {
+<span class="fc" id="L64">        return produtoRepository.findByNomeContaining(nome);</span>
+    }
+
+    public List&lt;Produto&gt; buscarProdutosComEstoqueBaixo(Integer quantidade) {
+<span class="fc" id="L68">        return produtoRepository.buscarProdutosComEstoqueBaixo(quantidade);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -91,4 +91,79 @@ class ClienteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("João Silva"));
     }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de sucesso ao atualizar cliente")
+    void testUpdateCliente() throws Exception {
+        when(clienteService.update(anyLong(), any(Cliente.class))).thenReturn(cliente);
+
+        mockMvc.perform(put("/clientes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cliente)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("João Silva"));
+    }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de sucesso ao deletar cliente")
+    void testDelete() throws Exception {
+        mockMvc.perform(delete("/clientes/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por nome com resultados")
+    void testBuscarPorNome() throws Exception {
+        List<Cliente> clientes = Arrays.asList(cliente);
+        when(clienteService.buscarPorNome("João")).thenReturn(clientes);
+
+        mockMvc.perform(get("/clientes/by-nome")
+                .param("nome", "João"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].nome").value("João Silva"));
+    }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por idade com resultados")
+    void testBuscarPorIdade() throws Exception {
+        List<Cliente> clientes = Arrays.asList(cliente);
+        when(clienteService.buscarPorIdade(30)).thenReturn(clientes);
+
+        mockMvc.perform(get("/clientes/by-idade")
+                .param("idade", "30"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].idade").value(30));
+    }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de lista vazia de clientes")
+    void testGetAllClientesEmpty() throws Exception {
+        when(clienteService.findAll()).thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/clientes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de pesquisa global sem resultados")
+    void testPesquisarGlobalSemResultados() throws Exception {
+        when(clienteService.pesquisarGlobal("inexistente")).thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/clientes/pesquisar")
+                .param("termo", "inexistente"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por nome sem resultados")
+    void testBuscarPorNomeSemResultados() throws Exception {
+        when(clienteService.buscarPorNome("inexistente")).thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/clientes/by-nome")
+                .param("nome", "inexistente"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
 }

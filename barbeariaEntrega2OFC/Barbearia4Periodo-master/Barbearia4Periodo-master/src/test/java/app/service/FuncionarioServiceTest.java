@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +40,7 @@ class FuncionarioServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de sucesso ao salvar funcionário")
+    @DisplayName("TESTE DE UNIDADE - Cenário de sucesso ao salvar funcionário")
     void testSaveFuncionarioSuccess() {
         when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(funcionario);
         
@@ -51,7 +52,7 @@ class FuncionarioServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de erro ao deletar funcionário inexistente")
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao deletar funcionário inexistente")
     void testDeleteFuncionarioNotFound() {
         when(funcionarioRepository.existsById(999L)).thenReturn(false);
         
@@ -64,7 +65,7 @@ class FuncionarioServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por nome com resultados")
+    @DisplayName("TESTE DE UNIDADE - Cenário de busca por nome com resultados")
     void testBuscarPorNome() {
         List<Funcionario> funcionarios = Arrays.asList(funcionario);
         when(funcionarioRepository.findByNomeContainingIgnoreCase("Carlos")).thenReturn(funcionarios);
@@ -75,5 +76,30 @@ class FuncionarioServiceTest {
         assertEquals(1, resultado.size());
         assertEquals("Carlos Barbeiro", resultado.get(0).getNome());
         verify(funcionarioRepository, times(1)).findByNomeContainingIgnoreCase("Carlos");
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao buscar funcionario por ID inexistente")
+    void testFindByIdNotFound() {
+        when(funcionarioRepository.findById(999L)).thenReturn(java.util.Optional.empty());
+        
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            funcionarioService.findById(999L);
+        });
+        
+        assertEquals("Funcionario not found with id: 999", exception.getMessage());
+        verify(funcionarioRepository, times(1)).findById(999L);
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de busca por telefone sem resultados")
+    void testBuscarPorTelefoneEmpty() {
+        when(funcionarioRepository.findByTelefoneContaining("999999999")).thenReturn(Arrays.asList());
+        
+        List<Funcionario> resultado = funcionarioService.buscarPorTelefone("999999999");
+        
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(funcionarioRepository, times(1)).findByTelefoneContaining("999999999");
     }
 }

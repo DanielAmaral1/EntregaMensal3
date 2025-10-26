@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AgendamentoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">AgendamentoService.java</span></div><h1>AgendamentoService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import java.time.LocalDateTime;
+import app.entity.Cliente;
+import app.entity.Agendamento;
+import app.repository.AgendamentoRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class AgendamentoService {
+
+    private final AgendamentoRepository agendamentoRepository;
+
+    @Autowired
+<span class="fc" id="L19">    public AgendamentoService(AgendamentoRepository agendamentoRepository) {</span>
+<span class="fc" id="L20">        this.agendamentoRepository = agendamentoRepository;</span>
+<span class="fc" id="L21">    }</span>
+
+    // Create
+    public Agendamento save(Agendamento agendamento) {
+<span class="fc" id="L25">        return agendamentoRepository.save(agendamento);</span>
+    }
+
+    // Read
+    public List&lt;Agendamento&gt; findAll() {
+<span class="fc" id="L30">        return agendamentoRepository.findAll();</span>
+    }
+ // Read by id
+    public Agendamento findById(Long id) {
+<span class="pc" id="L34">        return agendamentoRepository.findById(id)</span>
+<span class="pc" id="L35">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Agendamento not found with id: &quot; + id));</span>
+    }
+
+
+    // Update
+    public Agendamento update(Long id, Agendamento agendamentoDetails) {
+<span class="nc" id="L41">        Agendamento agendamento = findById(id);</span>
+<span class="nc" id="L42">        agendamento.setDataHora(agendamentoDetails.getDataHora());</span>
+<span class="nc" id="L43">        agendamento.setObservacoes(agendamentoDetails.getObservacoes());</span>
+<span class="nc" id="L44">        agendamento.setCliente(agendamentoDetails.getCliente());</span>
+<span class="nc" id="L45">        agendamento.setFuncionario(agendamentoDetails.getFuncionario());</span>
+<span class="nc" id="L46">        agendamento.setServico(agendamentoDetails.getServico());</span>
+<span class="nc" id="L47">        agendamento.setProdutos(agendamentoDetails.getProdutos());</span>
+<span class="nc" id="L48">        return agendamentoRepository.save(agendamento);</span>
+    }
+
+
+    // Delete
+    public void deleteById(Long id) {
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (!agendamentoRepository.existsById(id)) {</span>
+<span class="fc" id="L55">            throw new EntityNotFoundException(&quot;Agendamento not found with id: &quot; + id);</span>
+        }
+<span class="nc" id="L57">        agendamentoRepository.deleteById(id);</span>
+<span class="nc" id="L58">    }</span>
+    public List&lt;Agendamento&gt; buscarPorCliente(Cliente cliente) {
+<span class="nc" id="L60">        return agendamentoRepository.findByCliente(cliente);</span>
+    }
+    public List&lt;Agendamento&gt; buscarAgendamentosFuturos(LocalDateTime dataHoraAtual) {
+<span class="nc" id="L63">        return agendamentoRepository.findByDataHoraAfter(dataHoraAtual);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

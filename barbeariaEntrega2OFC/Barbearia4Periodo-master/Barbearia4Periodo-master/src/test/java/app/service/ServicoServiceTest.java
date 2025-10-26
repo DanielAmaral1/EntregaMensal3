@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +55,7 @@ class ServicoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por preço máximo")
+    @DisplayName("TESTE DE UNIDADE - Cenário de busca por preço máximo")
     void testBuscarPorPrecoAte() {
         List<Servico> servicos = Arrays.asList(servico);
         BigDecimal precoMaximo = new BigDecimal("30.00");
@@ -68,7 +69,7 @@ class ServicoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de erro ao deletar serviço inexistente")
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao deletar serviço inexistente")
     void testDeleteServicoNotFound() {
         when(servicoRepository.existsById(999L)).thenReturn(false);
         
@@ -81,7 +82,7 @@ class ServicoServiceTest {
     }
 
     @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de contagem de serviços")
+    @DisplayName("TESTE DE UNIDADE - Cenário de contagem de serviços")
     void testBuscarQtdServico() {
         when(servicoRepository.buscarQtdServico()).thenReturn(5L);
         
@@ -89,5 +90,47 @@ class ServicoServiceTest {
         
         assertEquals(5L, quantidade);
         verify(servicoRepository, times(1)).buscarQtdServico();
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao buscar serviço por ID inexistente")
+    void testFindByIdNotFound() {
+        when(servicoRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            servicoService.findById(999L);
+        });
+        
+        assertEquals("Servico not found with id: 999", exception.getMessage());
+        verify(servicoRepository, times(1)).findById(999L);
+    }
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de erro ao atualizar serviço inexistente")
+    void testUpdateServicoNotFound() {
+        when(servicoRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            servicoService.update(999L, servico);
+        });
+        
+        assertEquals("Servico not found with id: 999", exception.getMessage());
+        verify(servicoRepository, times(1)).findById(999L);
+        verify(servicoRepository, never()).save(any(Servico.class));
+    }
+
+
+
+    @Test
+    @DisplayName("TESTE DE UNIDADE - Cenário de busca por preço sem resultados")
+    void testBuscarPorPrecoAteEmpty() {
+        BigDecimal preco = new BigDecimal("1.00");
+        when(servicoRepository.findByPrecoLessThanEqual(preco)).thenReturn(Arrays.asList());
+        
+        List<Servico> resultado = servicoService.buscarPorPrecoAte(preco);
+        
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+        verify(servicoRepository, times(1)).findByPrecoLessThanEqual(preco);
     }
 }

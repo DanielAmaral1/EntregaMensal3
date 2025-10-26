@@ -17,13 +17,8 @@ public class Funcionario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_funcionario;
 
-    @NotBlank(message = "O campo nome é obrigatório")
     private String nome;
-
-    @NotBlank(message = "O campo telefone é obrigatório")
     private String telefone;
-
-    @NotBlank(message = "O campo endereço é obrigatório")
     private String endereco;
 
     // Relacionamentos removidos temporariamente

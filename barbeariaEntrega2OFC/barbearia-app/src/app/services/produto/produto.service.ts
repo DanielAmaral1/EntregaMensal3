@@ -17,7 +17,7 @@ export class ProdutoService {
   }
 
   findAll(): Observable<Produto[]> {
-    return this.http.get<Produto[]>(this.apiUrl);
+    return this.http.get<Produto[]>('http://localhost:8080/api/test-simple/produtos');
   }
 
   findById(id: number): Observable<Produto> {

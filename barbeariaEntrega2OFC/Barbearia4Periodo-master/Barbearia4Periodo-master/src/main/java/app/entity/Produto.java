@@ -19,16 +19,9 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_produto;
 
-    @NotBlank(message = "O campo nome é obrigatório")
     private String nome;
-
-    @NotBlank(message = "O campo descrição é obrigatório")
     private String descricao;
-
-    @NotNull(message = "O campo preço é obrigatório")
     private BigDecimal preco;
-
-    @NotNull(message = "O campo quantidade em estoque é obrigatório")
     private Integer quantidadeEstoque;
 
     // Relacionamentos removidos temporariamente

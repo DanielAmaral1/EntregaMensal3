@@ -21,13 +21,8 @@ public class Servico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_servico;
 
-    @NotBlank(message = "O campo nome é obrigatório")
     private String nome;
-
-    @NotBlank(message = "O campo descrição é obrigatório")
     private String descricao;
-
-    @NotNull(message = "O campo preço é obrigatório")
     private BigDecimal preco;
 
     private Integer duracaoMinutos;

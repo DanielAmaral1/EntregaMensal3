@@ -17,7 +17,7 @@ export class ServicoService {
   }
 
   findAll(): Observable<Servico[]> {
-    return this.http.get<Servico[]>(this.apiUrl);
+    return this.http.get<Servico[]>('http://localhost:8080/api/test-simple/servicos');
   }
 
   findById(id: number): Observable<Servico> {

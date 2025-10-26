@@ -17,7 +17,7 @@ export class FuncionarioService {
   }
 
   findAll(): Observable<Funcionario[]> {
-    return this.http.get<Funcionario[]>(this.apiUrl);
+    return this.http.get<Funcionario[]>('http://localhost:8080/api/test-simple/funcionarios');
   }
 
   findById(id: number): Observable<Funcionario> {

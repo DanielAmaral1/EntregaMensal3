@@ -51,6 +51,9 @@ class ClienteServiceTest {
         verify(clienteRepository, times(1)).save(cliente);
     }
 
+
+//teste unitario real e relvante
+//assertividade/efetividade dos testes
     @Test
     @DisplayName("TESTE DE UNIDADE - Cenário com dados incorretos e que lança exceção")
     void testUpdateClienteNotFound() {

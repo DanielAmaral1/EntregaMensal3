@@ -70,6 +70,9 @@ class ClienteControllerTest {
                 .andExpect(jsonPath("$.nome").value("João Silva"));
     }
 
+//Identificacao de tipo de teste/cenario
+//teste de integracao (repositories mockados)
+//clareza, organizacao e estrutura dos testes
     @Test
     @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por ID com sucesso")
     void testFindClienteById() throws Exception {
@@ -135,6 +138,7 @@ class ClienteControllerTest {
                 .andExpect(jsonPath("$[0].idade").value(30));
     }
 
+//cobertura de casos limites e excecoes
     @Test
     @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de lista vazia de clientes")
     void testGetAllClientesEmpty() throws Exception {

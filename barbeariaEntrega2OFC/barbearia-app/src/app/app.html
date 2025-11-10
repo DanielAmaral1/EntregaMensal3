@@ -1,0 +1,39 @@
+<div style="padding: 20px; font-family: Arial;">
+  <h1>✂️ BarberShop - Sistema de Clientes</h1>
+  
+  <div style="margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px;">
+    <h3>📋 Cadastrar Cliente</h3>
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+      <input type="text" #nome placeholder="Nome" required style="padding: 8px;">
+      <input type="tel" #celular placeholder="Celular" required style="padding: 8px;">
+      <input type="email" #email placeholder="Email" required style="padding: 8px;">
+      <input type="number" #idade placeholder="Idade" required style="padding: 8px;">
+      <button (click)="cadastrarCliente(nome.value, celular.value, email.value, idade.value)" style="padding: 10px; background: #007bff; color: white; border: none; border-radius: 3px;">
+        💾 Salvar Cliente
+      </button>
+    </div>
+  </div>
+
+  <div style="margin: 20px 0;">
+    <h3>👥 Lista de Clientes</h3>
+    <div *ngFor="let c of clientes" style="margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+      <strong>{{c.nome}}</strong><br>
+      📱 {{c.celular}}<br>
+      ✉️ {{c.email}}<br>
+      🎂 {{c.idade}} anos
+      <br><br>
+      <button (click)="deletarCliente(c)" style="padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 3px;">
+        🗑️ Deletar
+      </button>
+    </div>
+  </div>
+
+  <div style="margin: 20px 0; padding: 15px; background: #e7f3ff; border-radius: 5px;">
+    <h4>🔗 Status da Integração:</h4>
+    <p>Backend: <span [style.color]="backendStatus ? 'green' : 'red'">{{backendStatus ? '✅ Conectado' : '❌ Desconectado'}}</span></p>
+    <p>URL da API: http://localhost:8080/api/clientes</p>
+    <button (click)="testarConexao()" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 3px;">
+      🔄 Testar Conexão
+    </button>
+  </div>
+</div>

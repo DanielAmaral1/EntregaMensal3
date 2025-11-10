@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FuncionarioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">FuncionarioService.java</span></div><h1>FuncionarioService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import app.entity.Funcionario;
+import app.repository.FuncionarioRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class FuncionarioService {
+
+    private final FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+<span class="fc" id="L17">    public FuncionarioService(FuncionarioRepository funcionarioRepository) {</span>
+<span class="fc" id="L18">        this.funcionarioRepository = funcionarioRepository;</span>
+<span class="fc" id="L19">    }</span>
+
+    public Funcionario save(Funcionario funcionario) {
+<span class="fc" id="L22">        return funcionarioRepository.save(funcionario);</span>
+    }
+
+    public List&lt;Funcionario&gt; findAll() {
+<span class="fc" id="L26">        return funcionarioRepository.findAll();</span>
+    }
+
+    public Funcionario findById(Long id) {
+<span class="fc" id="L30">        return funcionarioRepository.findById(id)</span>
+<span class="fc" id="L31">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Funcionario not found with id: &quot; + id));</span>
+    }
+
+    public Funcionario update(Long id, Funcionario novaFuncionario) {
+<span class="fc" id="L35">        Funcionario funcionario = findById(id);</span>
+<span class="fc" id="L36">        funcionario.setNome(novaFuncionario.getNome());</span>
+<span class="fc" id="L37">        funcionario.setEndereco(novaFuncionario.getEndereco());</span>
+<span class="fc" id="L38">        funcionario.setTelefone(novaFuncionario.getTelefone());</span>
+<span class="fc" id="L39">        return funcionarioRepository.save(funcionario);</span>
+    }
+
+    public void delete(Long id) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (!funcionarioRepository.existsById(id)) {</span>
+<span class="fc" id="L44">            throw new EntityNotFoundException(&quot;Funcionario not found with id: &quot; + id);</span>
+        }
+<span class="fc" id="L46">        funcionarioRepository.deleteById(id);</span>
+<span class="fc" id="L47">    }</span>
+
+    public List&lt;Funcionario&gt; buscarPorNome(String nome) {
+<span class="fc" id="L50">        return  funcionarioRepository.findByNomeContainingIgnoreCase(nome);</span>
+    }
+
+    public List&lt;Funcionario&gt; buscarPorTelefone(String telefone){
+<span class="fc" id="L54">        return funcionarioRepository.findByTelefoneContaining(telefone);</span>
+}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

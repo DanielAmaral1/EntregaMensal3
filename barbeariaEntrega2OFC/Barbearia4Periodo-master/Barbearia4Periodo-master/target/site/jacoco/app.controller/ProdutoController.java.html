@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProdutoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">ProdutoController.java</span></div><h1>ProdutoController.java</h1><pre class="source lang-java linenums">package app.controller;
+
+import app.entity.Produto;
+import app.service.ProdutoService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/produtos&quot;)
+<span class="fc" id="L15">public class ProdutoController {</span>
+
+    @Autowired
+    private ProdutoService produtoService;
+
+    @PostMapping
+    public ResponseEntity&lt;Produto&gt; save(@Valid @RequestBody Produto produto) {
+<span class="fc" id="L22">        return ResponseEntity.ok(produtoService.save(produto));</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Produto&gt;&gt; findAll() {
+        try {
+<span class="fc" id="L28">            List&lt;Produto&gt; produtos = produtoService.findAll();</span>
+<span class="fc" id="L29">            return ResponseEntity.ok(produtos);</span>
+<span class="nc" id="L30">        } catch (Exception e) {</span>
+<span class="nc" id="L31">            e.printStackTrace();</span>
+<span class="nc" id="L32">            return ResponseEntity.status(500).build();</span>
+        }
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Produto&gt; findById(@PathVariable Long id) {
+<span class="fc" id="L38">        return produtoService.findById(id)</span>
+<span class="fc" id="L39">                .map(ResponseEntity::ok)</span>
+<span class="fc" id="L40">                .orElse(ResponseEntity.notFound().build());</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Produto&gt; update(@PathVariable Long id, @Valid @RequestBody Produto produto) {
+<span class="fc" id="L45">        return ResponseEntity.ok(produtoService.update(id, produto));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteById(@PathVariable Long id) {
+<span class="fc" id="L50">        produtoService.deleteById(id);</span>
+<span class="fc" id="L51">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @GetMapping(&quot;/buscar&quot;)
+    public ResponseEntity&lt;List&lt;Produto&gt;&gt; buscarPorNome(@RequestParam String nome) {
+<span class="fc" id="L56">        return ResponseEntity.ok(produtoService.buscarPorNome(nome));</span>
+    }
+
+    @GetMapping(&quot;/estoque-baixo&quot;)
+    public ResponseEntity&lt;List&lt;Produto&gt;&gt; buscarEstoqueBaixo(@RequestParam Integer quantidade) {
+<span class="fc" id="L61">        return ResponseEntity.ok(produtoService.buscarProdutosComEstoqueBaixo(quantidade));</span>
+    }
+
+    @GetMapping(&quot;/preco-ate&quot;)
+    public ResponseEntity&lt;List&lt;Produto&gt;&gt; buscarPorPrecoAte(@RequestParam BigDecimal preco) {
+<span class="fc" id="L66">        return ResponseEntity.ok(produtoService.buscarPorPrecoAte(preco));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

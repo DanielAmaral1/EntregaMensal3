@@ -1,0 +1,26 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Barbearia4Periodo,app,BarbeariaApplication,5,8,0,0,2,2,1,2,1,2
+Barbearia4Periodo,app,BarbeariaApplication.new WebMvcConfigurer() {...},0,50,0,0,0,7,0,2,0,2
+Barbearia4Periodo,app.service,FuncionarioService,0,79,0,2,0,18,0,10,0,9
+Barbearia4Periodo,app.service,ServicoService,19,87,0,2,6,20,0,11,0,10
+Barbearia4Periodo,app.service,ClienteService,0,130,1,3,0,29,1,11,0,10
+Barbearia4Periodo,app.service,AgendamentoService,52,39,1,1,12,9,4,6,3,6
+Barbearia4Periodo,app.service,ProdutoService,5,101,2,6,1,22,2,12,0,10
+Barbearia4Periodo,app.controller,ClienteController,0,68,0,0,0,13,0,10,0,10
+Barbearia4Periodo,app.controller,TestSimpleController,0,125,0,0,0,27,0,4,0,4
+Barbearia4Periodo,app.controller,TestController,39,124,0,0,10,31,0,3,0,3
+Barbearia4Periodo,app.controller,SimpleController,0,39,0,0,0,13,0,4,0,4
+Barbearia4Periodo,app.controller,FuncionarioController,7,53,0,0,3,11,0,8,0,8
+Barbearia4Periodo,app.controller,ServicoController,7,69,0,0,3,14,0,9,0,9
+Barbearia4Periodo,app.controller,AgendamentoController,0,39,0,0,0,8,0,6,0,6
+Barbearia4Periodo,app.controller,ProdutoController,7,59,0,0,3,13,0,9,0,9
+Barbearia4Periodo,app.entity,ProdutoSimple,4,31,3,3,0,6,3,3,0,3
+Barbearia4Periodo,app.entity,Produto,4,31,3,3,0,6,3,3,0,3
+Barbearia4Periodo,app.entity,Cliente,17,33,2,4,6,6,3,4,1,3
+Barbearia4Periodo,app.entity,FuncionarioSimple,4,31,3,3,0,6,3,3,0,3
+Barbearia4Periodo,app.entity,Servico,2,33,2,4,0,6,2,4,0,3
+Barbearia4Periodo,app.entity,ServicoSimple,4,31,3,3,0,6,3,3,0,3
+Barbearia4Periodo,app.entity,Agendamento,4,31,3,3,0,6,3,3,0,3
+Barbearia4Periodo,app.entity,Funcionario,2,33,2,4,0,6,2,4,0,3
+Barbearia4Periodo,app.config,DatabaseConfig,0,3,0,0,0,1,0,1,0,1
+Barbearia4Periodo,app.config,CorsConfig,0,47,0,0,0,7,0,2,0,2

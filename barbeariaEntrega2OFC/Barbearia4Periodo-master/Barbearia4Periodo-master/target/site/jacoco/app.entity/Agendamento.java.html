@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Agendamento.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.entity</a> &gt; <span class="el_source">Agendamento.java</span></div><h1>Agendamento.java</h1><pre class="source lang-java linenums">package app.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+<span class="fc" id="L16">public class Agendamento {</span>
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_agendamento;
+
+    @NotNull(message = &quot;O campo data/hora é obrigatório&quot;)
+    private LocalDateTime dataHora;
+
+    private String observacoes;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;id_cliente&quot;, nullable = false)
+    @NotNull(message = &quot;O campo cliente é obrigatório&quot;)
+    @JsonIgnoreProperties(&quot;agendamentos&quot;)
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;id_funcionario&quot;, nullable = false)
+    @NotNull(message = &quot;O campo funcionário é obrigatório&quot;)
+    @JsonIgnoreProperties(&quot;agendamentos&quot;)
+    private Funcionario funcionario;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;id_servico&quot;, nullable = false)
+    @NotNull(message = &quot;O campo serviço é obrigatório&quot;)
+    @JsonIgnoreProperties(&quot;agendamentos&quot;)
+    private Servico servico;
+
+    @ManyToMany
+    @JoinTable(
+            name = &quot;agendamento_produto&quot;,
+            joinColumns = @JoinColumn(name = &quot;id_agendamento&quot;),
+            inverseJoinColumns = @JoinColumn(name = &quot;id_produto&quot;)
+    )
+    @JsonIgnoreProperties(&quot;agendamentos&quot;)
+    private List&lt;Produto&gt; produtos;
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L58" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L59">        Agendamento that = (Agendamento) o;</span>
+<span class="fc" id="L60">        return java.util.Objects.equals(id_agendamento, that.id_agendamento);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L65">        return java.util.Objects.hash(id_agendamento);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

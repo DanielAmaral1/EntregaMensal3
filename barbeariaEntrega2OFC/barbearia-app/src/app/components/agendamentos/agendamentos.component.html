@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="page-header">
+    <h2>📅 Agendamentos</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Agendamento' }}
+    </button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoAgendamento ? 'Editar Agendamento' : 'Cadastrar Novo Agendamento' }}</h3>
+    <form (ngSubmit)="cadastrarAgendamento()">
+      <div class="form-group">
+        <label class="form-label" for="cliente">Cliente:</label>
+        <select class="form-input" id="cliente" name="cliente" [(ngModel)]="agendamento.cliente" required>
+          <option value="">Selecione um cliente</option>
+          <option *ngFor="let cliente of clientes" [ngValue]="cliente">{{ cliente.nome }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="funcionario">Funcionário:</label>
+        <select class="form-input" id="funcionario" name="funcionario" [(ngModel)]="agendamento.funcionario" required>
+          <option value="">Selecione um funcionário</option>
+          <option *ngFor="let funcionario of funcionarios" [ngValue]="funcionario">{{ funcionario.nome }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="servico">Serviço:</label>
+        <select class="form-input" id="servico" name="servico" [(ngModel)]="agendamento.servico" required>
+          <option value="">Selecione um serviço</option>
+          <option *ngFor="let servico of servicos" [ngValue]="servico">{{ servico.nome }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="dataHora">Data e Hora:</label>
+        <input class="form-input" type="datetime-local" id="dataHora" name="dataHora" [(ngModel)]="agendamento.dataHora" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="observacoes">Observações:</label>
+        <select class="form-input" id="observacoes" name="observacoes" [(ngModel)]="agendamento.observacoes">
+          <option value="">Nenhuma observação</option>
+          <option value="Cliente preferencial">Cliente preferencial</option>
+          <option value="Primeira vez">Primeira vez</option>
+          <option value="Corte especial">Corte especial</option>
+          <option value="Alergia">Alergia</option>
+          <option value="Outros">Outros</option>
+        </select>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoAgendamento ? '✏️ Atualizar' : '💾 Salvar' }} Agendamento</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="agendamentos-grid">
+    <div *ngFor="let a of agendamentos" class="agendamento-card card fade-in-up">
+      <div class="agendamento-icon">📅</div>
+      <h4>{{ a.cliente.nome }}</h4>
+      <div class="agendamento-info">
+        <p>👨💼 {{ a.funcionario.nome }}</p>
+        <p>✂️ {{ a.servico.nome }}</p>
+        <p>📆 {{ a.dataHora | date:'dd/MM/yyyy HH:mm' }}</p>
+        <p>📝 {{ a.observacoes || 'Nenhuma observação' }}</p>
+      </div>
+      <div class="agendamento-actions">
+        <button class="btn btn-edit" (click)="editarAgendamento(a)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarAgendamento(a)">🗑️ Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>

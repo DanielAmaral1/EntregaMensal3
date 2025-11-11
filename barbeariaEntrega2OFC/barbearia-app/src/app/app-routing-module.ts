@@ -6,14 +6,18 @@ import { AgendamentosComponent } from './components/agendamentos/agendamentos.co
 import { ServicosComponent } from './components/servicos/servicos.component';
 import { FuncionariosComponent } from './components/funcionarios/funcionarios.component';
 import { ProdutosComponent } from './components/produtos/produtos.component';
+import { LoginComponent } from './pages/login/login.component';
+import { AuthGuard } from './core/auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: PagInicialComponent },
-  { path: 'clientes', component: ClientesComponent },
-  { path: 'agendamentos', component: AgendamentosComponent },
-  { path: 'servicos', component: ServicosComponent },
-  { path: 'funcionarios', component: FuncionariosComponent },
-  { path: 'produtos', component: ProdutosComponent }
+  { path: 'login', component: LoginComponent },
+  { path: '', component: PagInicialComponent, canActivate: [AuthGuard] },
+  { path: 'clientes', component: ClientesComponent, canActivate: [AuthGuard] },
+  { path: 'agendamentos', component: AgendamentosComponent, canActivate: [AuthGuard] },
+  { path: 'servicos', component: ServicosComponent, canActivate: [AuthGuard] },
+  { path: 'funcionarios', component: FuncionariosComponent, canActivate: [AuthGuard] },
+  { path: 'produtos', component: ProdutosComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

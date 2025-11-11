@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: app.controller.ClienteControllerTest
 -------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.696 s -- in app.controller.ClienteControllerTest
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.565 s -- in app.controller.ClienteControllerTest

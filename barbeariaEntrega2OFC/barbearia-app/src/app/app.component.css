@@ -56,6 +56,17 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
+.logout-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: #4a5568;
+  color: #e2e8f0;
+}
+
 .main-content {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;

@@ -1,8 +1,8 @@
-<header class="header">
+<header class="header" *ngIf="isAuthenticated()">
   <div class="header-content">
     <div class="logo">
       <h1>✂️ BarberShop</h1>
-      <span class="tagline">Estilo & Tradição</span>
+      <span class="tagline">Estilo &amp; Tradição</span>
     </div>
     <nav class="nav">
       <a routerLink="/" routerLinkActive="active" class="nav-link">🏠 Início</a>
@@ -11,6 +11,7 @@
       <a routerLink="/servicos" routerLinkActive="active" class="nav-link">✂️ Serviços</a>
       <a routerLink="/funcionarios" routerLinkActive="active" class="nav-link">👨‍💼 Funcionários</a>
       <a routerLink="/produtos" routerLinkActive="active" class="nav-link">🛍️ Produtos</a>
+      <button type="button" class="nav-link logout-button" (click)="logout()">🚪 Sair</button>
     </nav>
   </div>
 </header>

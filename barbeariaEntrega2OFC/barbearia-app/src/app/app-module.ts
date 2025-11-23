@@ -11,6 +11,8 @@ import { AgendamentosComponent } from './components/agendamentos/agendamentos.co
 import { ServicosComponent } from './components/servicos/servicos.component';
 import { FuncionariosComponent } from './components/funcionarios/funcionarios.component';
 import { ProdutosComponent } from './components/produtos/produtos.component';
+import { AvaliacoesComponent } from './components/avaliacoes/avaliacoes.component';
+import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 
@@ -23,6 +25,8 @@ import { AuthInterceptor } from './core/auth/auth.interceptor';
     ServicosComponent,
     FuncionariosComponent,
     ProdutosComponent,
+    AvaliacoesComponent,
+    FeedComponent,
     LoginComponent
   ],
   imports: [

@@ -1,0 +1,109 @@
+<div class="container">
+  <div class="page-header">
+    <h2>⭐ Avaliações de Satisfação</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Nova Avaliação' }}
+    </button>
+  </div>
+
+  <div class="stats-card card fade-in-up" *ngIf="mediaNotas > 0">
+    <h3>📊 Média de Satisfação</h3>
+    <div class="media-display">
+      <span class="media-value">{{ mediaNotas.toFixed(1) }}</span>
+      <span class="media-stars">{{ getEstrelas(Math.round(mediaNotas)) }}</span>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" 
+             class="search-input" 
+             placeholder="🔍 Pesquisar avaliações..." 
+             [(ngModel)]="termoPesquisa" 
+             (input)="pesquisar()">
+      <button *ngIf="termoPesquisa" class="btn-clear" (click)="limparPesquisa()">❌</button>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoAvaliacao ? 'Editar Avaliação' : 'Nova Avaliação' }}</h3>
+    <form (ngSubmit)="cadastrarAvaliacao()">
+      <div class="form-group">
+        <label class="form-label" for="cliente">Cliente:</label>
+        <select class="form-input" id="cliente" name="cliente" 
+                [(ngModel)]="avaliacao.cliente.id_cliente" required>
+          <option value="">Selecione um cliente</option>
+          <option *ngFor="let c of clientes" [value]="c.id_cliente">{{ c.nome }}</option>
+        </select>
+        <div *ngIf="erros.cliente" class="error-message">{{ erros.cliente }}</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="agendamento">Agendamento (opcional):</label>
+        <select class="form-input" id="agendamento" name="agendamento" 
+                [(ngModel)]="avaliacao.agendamento.id_agendamento">
+          <option [value]="0">Nenhum</option>
+          <option *ngFor="let a of agendamentos" [value]="a.id_agendamento">
+            {{ a.dataHora }} - {{ a.cliente?.nome }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="nota">Nota (1-5):</label>
+        <input class="form-input" type="number" id="nota" name="nota" 
+               [(ngModel)]="avaliacao.nota" min="1" max="5" required>
+        <div *ngIf="avaliacao.nota" class="stars-preview">{{ getEstrelas(avaliacao.nota) }}</div>
+        <div *ngIf="erros.nota" class="error-message">{{ erros.nota }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="comentario">Comentário (opcional):</label>
+        <textarea class="form-input" id="comentario" name="comentario" 
+                  [(ngModel)]="avaliacao.comentario" rows="4" 
+                  placeholder="Deixe seu comentário sobre o atendimento..."></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          {{ editandoAvaliacao ? '✏️ Atualizar' : '💾 Salvar' }} Avaliação
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="avaliacoes-grid">
+    <div *ngFor="let a of avaliacoesFiltradas" class="avaliacao-card card fade-in-up">
+      <div class="avaliacao-header">
+        <div class="avaliacao-cliente">
+          <span class="avatar">👤</span>
+          <span class="nome">{{ a.cliente?.nome || 'Cliente' }}</span>
+        </div>
+        <div class="avaliacao-nota">
+          <span class="stars">{{ getEstrelas(a.nota) }}</span>
+          <span class="nota-numero">({{ a.nota }}/5)</span>
+        </div>
+      </div>
+      
+      <div class="avaliacao-comentario" *ngIf="a.comentario">
+        <p>"{{ a.comentario }}"</p>
+      </div>
+      
+      <div class="avaliacao-meta">
+        <span *ngIf="a.agendamento" class="meta-item">📅 Agendamento #{{ a.agendamento.id_agendamento }}</span>
+        <span class="meta-item">🕐 {{ a.dataAvaliacao | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      
+      <div class="avaliacao-actions">
+        <button class="btn-edit" (click)="editarAvaliacao(a)">✏️ Editar</button>
+        <button class="btn-delete" (click)="deletarAvaliacao(a)">🗑️ Deletar</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="avaliacoesFiltradas.length === 0" class="empty-state">
+    <p>Nenhuma avaliação encontrada.</p>
+  </div>
+</div>
+

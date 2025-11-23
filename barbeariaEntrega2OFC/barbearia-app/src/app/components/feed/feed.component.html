@@ -1,0 +1,115 @@
+<div class="container">
+  <div class="page-header">
+    <h2>📱 Feed Interativo</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Post' }}
+    </button>
+  </div>
+
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" 
+             class="search-input" 
+             placeholder="🔍 Pesquisar posts..." 
+             [(ngModel)]="termoPesquisa" 
+             (input)="pesquisar()">
+      <button *ngIf="termoPesquisa" class="btn-clear" (click)="limparPesquisa()">❌</button>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoPost ? 'Editar Post' : 'Novo Post' }}</h3>
+    <form (ngSubmit)="cadastrarPost()">
+      <div class="form-group">
+        <label class="form-label" for="autor">Autor:</label>
+        <select class="form-input" id="autor" name="autor" 
+                [(ngModel)]="post.autor.id_cliente" required>
+          <option value="">Selecione um autor</option>
+          <option *ngFor="let c of clientes" [value]="c.id_cliente">{{ c.nome }}</option>
+        </select>
+        <div *ngIf="erros.autor" class="error-message">{{ erros.autor }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="conteudo">Conteúdo:</label>
+        <textarea class="form-input" id="conteudo" name="conteudo" 
+                  [(ngModel)]="post.conteudo" rows="6" 
+                  placeholder="O que você está pensando?" required></textarea>
+        <div *ngIf="erros.conteudo" class="error-message">{{ erros.conteudo }}</div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          {{ editandoPost ? '✏️ Atualizar' : '📤 Publicar' }} Post
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="feed-container">
+    <div *ngFor="let p of postsFiltrados" class="post-card card fade-in-up">
+      <div class="post-header">
+        <div class="post-author">
+          <span class="avatar">👤</span>
+          <div class="author-info">
+            <span class="author-name">{{ p.autor?.nome || 'Anônimo' }}</span>
+            <span class="post-date">{{ p.dataPost | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+        <div class="post-actions-menu">
+          <button class="btn-edit" (click)="editarPost(p)">✏️</button>
+          <button class="btn-delete" (click)="deletarPost(p)">🗑️</button>
+        </div>
+      </div>
+      
+      <div class="post-content">
+        <p>{{ p.conteudo }}</p>
+      </div>
+      
+      <div class="post-interactions">
+        <div class="interaction-buttons">
+          <button class="btn-interaction" (click)="curtirPost(p)">
+            ❤️ Curtir ({{ p.curtidas || 0 }})
+          </button>
+          <button class="btn-interaction" (click)="toggleComentarios(p.id_post!)">
+            💬 Comentários ({{ p.comentarios?.length || 0 }})
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="comentariosExpandidos.has(p.id_post!)" class="comentarios-section">
+        <div class="comentarios-list">
+          <div *ngFor="let comentario of p.comentarios" class="comentario-item">
+            <div class="comentario-header">
+              <span class="comentario-author">{{ comentario.autor?.nome || 'Anônimo' }}</span>
+              <span class="comentario-date">{{ comentario.dataComentario | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <p class="comentario-texto">{{ comentario.texto }}</p>
+            <button class="btn-delete-small" 
+                    *ngIf="comentario.id_comentario"
+                    (click)="removerComentario(comentario.id_comentario, p.id_post!)">
+              🗑️
+            </button>
+          </div>
+        </div>
+        
+        <div class="novo-comentario-form">
+          <textarea 
+            class="form-input" 
+            placeholder="Escreva um comentário..." 
+            rows="2"
+            [(ngModel)]="novoComentario[p.id_post!]"></textarea>
+          <button class="btn btn-primary" (click)="adicionarComentario(p)">
+            📤 Comentar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="postsFiltrados.length === 0" class="empty-state">
+    <p>Nenhum post encontrado.</p>
+  </div>
+</div>
+

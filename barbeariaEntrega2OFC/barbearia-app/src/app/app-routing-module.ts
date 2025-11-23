@@ -6,6 +6,8 @@ import { AgendamentosComponent } from './components/agendamentos/agendamentos.co
 import { ServicosComponent } from './components/servicos/servicos.component';
 import { FuncionariosComponent } from './components/funcionarios/funcionarios.component';
 import { ProdutosComponent } from './components/produtos/produtos.component';
+import { AvaliacoesComponent } from './components/avaliacoes/avaliacoes.component';
+import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './core/auth/auth.guard';
 
@@ -17,6 +19,8 @@ const routes: Routes = [
   { path: 'servicos', component: ServicosComponent, canActivate: [AuthGuard] },
   { path: 'funcionarios', component: FuncionariosComponent, canActivate: [AuthGuard] },
   { path: 'produtos', component: ProdutosComponent, canActivate: [AuthGuard] },
+  { path: 'avaliacoes', component: AvaliacoesComponent, canActivate: [AuthGuard] },
+  { path: 'feed', component: FeedComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' }
 ];
 

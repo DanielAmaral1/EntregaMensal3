@@ -1,0 +1,144 @@
+.stats-card {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.stats-card h3 {
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.media-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.media-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffc107;
+}
+
+.media-stars {
+  font-size: 1.5rem;
+}
+
+.avaliacoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.avaliacao-card {
+  transition: all 0.3s ease;
+}
+
+.avaliacao-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.avaliacao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #4a5568;
+}
+
+.avaliacao-cliente {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  font-size: 2rem;
+}
+
+.nome {
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.avaliacao-nota {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars {
+  font-size: 1.25rem;
+  color: #ffc107;
+}
+
+.nota-numero {
+  color: #a0aec0;
+  font-size: 0.875rem;
+}
+
+.avaliacao-comentario {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #1a202c;
+  border-radius: 0.5rem;
+  border-left: 3px solid #4a5568;
+}
+
+.avaliacao-comentario p {
+  color: #e2e8f0;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.avaliacao-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #4a5568;
+}
+
+.meta-item {
+  color: #a0aec0;
+  font-size: 0.875rem;
+}
+
+.avaliacao-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
+
+.stars-preview {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  color: #ffc107;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #a0aec0;
+}
+
+@media (max-width: 768px) {
+  .avaliacoes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .avaliacao-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+

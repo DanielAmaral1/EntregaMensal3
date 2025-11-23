@@ -33,19 +33,25 @@ public class AvaliacaoService {
     }
 
     public Avaliacao save(Avaliacao avaliacao) {
-        if (avaliacao.getCliente() != null && avaliacao.getCliente().getId_cliente() != null) {
+        if (avaliacao.getCliente() != null && avaliacao.getCliente().getId_cliente() != null && avaliacao.getCliente().getId_cliente() > 0) {
             avaliacao.setCliente(clienteRepository.findById(avaliacao.getCliente().getId_cliente())
                     .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado")));
+        } else {
+            throw new IllegalArgumentException("Cliente é obrigatório e deve ser válido");
         }
         
-        if (avaliacao.getAgendamento() != null && avaliacao.getAgendamento().getId_agendamento() != null) {
+        if (avaliacao.getAgendamento() != null && avaliacao.getAgendamento().getId_agendamento() != null && avaliacao.getAgendamento().getId_agendamento() > 0) {
             avaliacao.setAgendamento(agendamentoRepository.findById(avaliacao.getAgendamento().getId_agendamento())
                     .orElse(null));
+        } else {
+            avaliacao.setAgendamento(null);
         }
         
-        if (avaliacao.getFuncionario() != null && avaliacao.getFuncionario().getId_funcionario() != null) {
+        if (avaliacao.getFuncionario() != null && avaliacao.getFuncionario().getId_funcionario() != null && avaliacao.getFuncionario().getId_funcionario() > 0) {
             avaliacao.setFuncionario(funcionarioRepository.findById(avaliacao.getFuncionario().getId_funcionario())
                     .orElse(null));
+        } else {
+            avaliacao.setFuncionario(null);
         }
         
         return avaliacaoRepository.save(avaliacao);

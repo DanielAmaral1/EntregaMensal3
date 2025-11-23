@@ -31,9 +31,11 @@ public class PostFeedService {
     }
 
     public PostFeed save(PostFeed post) {
-        if (post.getAutor() != null && post.getAutor().getId_cliente() != null) {
+        if (post.getAutor() != null && post.getAutor().getId_cliente() != null && post.getAutor().getId_cliente() > 0) {
             post.setAutor(clienteRepository.findById(post.getAutor().getId_cliente())
                     .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado")));
+        } else {
+            throw new IllegalArgumentException("Autor é obrigatório e deve ser válido");
         }
         return postFeedRepository.save(post);
     }
@@ -80,9 +82,11 @@ public class PostFeedService {
         PostFeed post = findById(idPost)
                 .orElseThrow(() -> new EntityNotFoundException("Post não encontrado com id: " + idPost));
 
-        if (comentario.getAutor() != null && comentario.getAutor().getId_cliente() != null) {
+        if (comentario.getAutor() != null && comentario.getAutor().getId_cliente() != null && comentario.getAutor().getId_cliente() > 0) {
             comentario.setAutor(clienteRepository.findById(comentario.getAutor().getId_cliente())
                     .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado")));
+        } else {
+            throw new IllegalArgumentException("Autor do comentário é obrigatório e deve ser válido");
         }
 
         comentario.setPost(post);

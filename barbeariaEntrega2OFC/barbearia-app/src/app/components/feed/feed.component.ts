@@ -188,12 +188,20 @@ export class FeedComponent implements OnInit {
 
   adicionarComentario(post: PostFeed) {
     if (!post.id_post || !this.novoComentario[post.id_post]?.trim()) {
+      alert('O comentário não pode estar vazio!');
+      return;
+    }
+
+    // Usa o primeiro cliente disponível como autor do comentário (protótipo)
+    // Em produção, deveria usar o cliente logado
+    if (this.clientes.length === 0) {
+      alert('Nenhum cliente disponível para comentar!');
       return;
     }
 
     const comentario: ComentarioFeed = {
       texto: this.novoComentario[post.id_post],
-      autor: { id_cliente: this.post.autor?.id_cliente || 0 }
+      autor: { id_cliente: this.clientes[0].id_cliente }
     };
 
     this.postFeedService.adicionarComentario(post.id_post, comentario).subscribe({

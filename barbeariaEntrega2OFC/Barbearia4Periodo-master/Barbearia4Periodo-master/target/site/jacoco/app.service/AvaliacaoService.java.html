@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvaliacaoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">AvaliacaoService.java</span></div><h1>AvaliacaoService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import app.entity.Avaliacao;
+import app.repository.AvaliacaoRepository;
+import app.repository.ClienteRepository;
+import app.repository.AgendamentoRepository;
+import app.repository.FuncionarioRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class AvaliacaoService {
+
+    private final AvaliacaoRepository avaliacaoRepository;
+    private final ClienteRepository clienteRepository;
+    private final AgendamentoRepository agendamentoRepository;
+    private final FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+<span class="nc" id="L24">    public AvaliacaoService(</span>
+            AvaliacaoRepository avaliacaoRepository,
+            ClienteRepository clienteRepository,
+            AgendamentoRepository agendamentoRepository,
+            FuncionarioRepository funcionarioRepository) {
+<span class="nc" id="L29">        this.avaliacaoRepository = avaliacaoRepository;</span>
+<span class="nc" id="L30">        this.clienteRepository = clienteRepository;</span>
+<span class="nc" id="L31">        this.agendamentoRepository = agendamentoRepository;</span>
+<span class="nc" id="L32">        this.funcionarioRepository = funcionarioRepository;</span>
+<span class="nc" id="L33">    }</span>
+
+    public Avaliacao save(Avaliacao avaliacao) {
+<span class="nc bnc" id="L36" title="All 6 branches missed.">        if (avaliacao.getCliente() != null &amp;&amp; avaliacao.getCliente().getId_cliente() != null &amp;&amp; avaliacao.getCliente().getId_cliente() &gt; 0) {</span>
+<span class="nc" id="L37">            avaliacao.setCliente(clienteRepository.findById(avaliacao.getCliente().getId_cliente())</span>
+<span class="nc" id="L38">                    .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Cliente não encontrado&quot;)));</span>
+<span class="nc" id="L39">        } else {</span>
+<span class="nc" id="L40">            throw new IllegalArgumentException(&quot;Cliente é obrigatório e deve ser válido&quot;);</span>
+        }
+        
+<span class="nc bnc" id="L43" title="All 6 branches missed.">        if (avaliacao.getAgendamento() != null &amp;&amp; avaliacao.getAgendamento().getId_agendamento() != null &amp;&amp; avaliacao.getAgendamento().getId_agendamento() &gt; 0) {</span>
+<span class="nc" id="L44">            avaliacao.setAgendamento(agendamentoRepository.findById(avaliacao.getAgendamento().getId_agendamento())</span>
+<span class="nc" id="L45">                    .orElse(null));</span>
+<span class="nc" id="L46">        } else {</span>
+<span class="nc" id="L47">            avaliacao.setAgendamento(null);</span>
+        }
+        
+<span class="nc bnc" id="L50" title="All 6 branches missed.">        if (avaliacao.getFuncionario() != null &amp;&amp; avaliacao.getFuncionario().getId_funcionario() != null &amp;&amp; avaliacao.getFuncionario().getId_funcionario() &gt; 0) {</span>
+<span class="nc" id="L51">            avaliacao.setFuncionario(funcionarioRepository.findById(avaliacao.getFuncionario().getId_funcionario())</span>
+<span class="nc" id="L52">                    .orElse(null));</span>
+<span class="nc" id="L53">        } else {</span>
+<span class="nc" id="L54">            avaliacao.setFuncionario(null);</span>
+        }
+        
+<span class="nc" id="L57">        return avaliacaoRepository.save(avaliacao);</span>
+    }
+
+    public List&lt;Avaliacao&gt; findAll() {
+<span class="nc" id="L61">        return avaliacaoRepository.findAll();</span>
+    }
+
+    public Optional&lt;Avaliacao&gt; findById(Long id) {
+<span class="nc" id="L65">        return avaliacaoRepository.findById(id);</span>
+    }
+
+    public Avaliacao update(Long id, Avaliacao avaliacaoDetails) {
+<span class="nc" id="L69">        Avaliacao avaliacao = findById(id)</span>
+<span class="nc" id="L70">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Avaliação não encontrada com id: &quot; + id));</span>
+
+<span class="nc" id="L72">        avaliacao.setNota(avaliacaoDetails.getNota());</span>
+<span class="nc" id="L73">        avaliacao.setComentario(avaliacaoDetails.getComentario());</span>
+
+<span class="nc bnc" id="L75" title="All 4 branches missed.">        if (avaliacaoDetails.getAgendamento() != null &amp;&amp; avaliacaoDetails.getAgendamento().getId_agendamento() != null) {</span>
+<span class="nc" id="L76">            avaliacao.setAgendamento(agendamentoRepository.findById(avaliacaoDetails.getAgendamento().getId_agendamento())</span>
+<span class="nc" id="L77">                    .orElse(null));</span>
+        }
+
+<span class="nc bnc" id="L80" title="All 4 branches missed.">        if (avaliacaoDetails.getFuncionario() != null &amp;&amp; avaliacaoDetails.getFuncionario().getId_funcionario() != null) {</span>
+<span class="nc" id="L81">            avaliacao.setFuncionario(funcionarioRepository.findById(avaliacaoDetails.getFuncionario().getId_funcionario())</span>
+<span class="nc" id="L82">                    .orElse(null));</span>
+        }
+
+<span class="nc" id="L85">        return avaliacaoRepository.save(avaliacao);</span>
+    }
+
+    public void deleteById(Long id) {
+<span class="nc" id="L89">        avaliacaoRepository.deleteById(id);</span>
+<span class="nc" id="L90">    }</span>
+
+    public List&lt;Avaliacao&gt; findByCliente(Long idCliente) {
+<span class="nc" id="L93">        return avaliacaoRepository.findByClienteIdCliente(idCliente);</span>
+    }
+
+    public List&lt;Avaliacao&gt; findByAgendamento(Long idAgendamento) {
+<span class="nc" id="L97">        return avaliacaoRepository.findByAgendamentoIdAgendamento(idAgendamento);</span>
+    }
+
+    public List&lt;Avaliacao&gt; findByFuncionario(Long idFuncionario) {
+<span class="nc" id="L101">        return avaliacaoRepository.findByFuncionarioIdFuncionario(idFuncionario);</span>
+    }
+
+    public List&lt;Avaliacao&gt; findByNotaMinima(Integer nota) {
+<span class="nc" id="L105">        return avaliacaoRepository.findByNotaGreaterThanEqual(nota);</span>
+    }
+
+    public List&lt;Avaliacao&gt; findByNotaRange(Integer notaMin, Integer notaMax) {
+<span class="nc" id="L109">        return avaliacaoRepository.findByNotaBetween(notaMin, notaMax);</span>
+    }
+
+    public List&lt;Avaliacao&gt; findAllOrderByDataDesc() {
+<span class="nc" id="L113">        return avaliacaoRepository.findByOrderByDataAvaliacaoDesc();</span>
+    }
+
+    public Double calcularMediaNotas() {
+<span class="nc" id="L117">        List&lt;Avaliacao&gt; todas = findAll();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (todas.isEmpty()) {</span>
+<span class="nc" id="L119">            return 0.0;</span>
+        }
+<span class="nc" id="L121">        return todas.stream()</span>
+<span class="nc" id="L122">                .mapToInt(Avaliacao::getNota)</span>
+<span class="nc" id="L123">                .average()</span>
+<span class="nc" id="L124">                .orElse(0.0);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

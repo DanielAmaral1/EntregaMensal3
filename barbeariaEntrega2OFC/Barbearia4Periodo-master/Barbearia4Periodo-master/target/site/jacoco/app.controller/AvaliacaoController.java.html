@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AvaliacaoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">AvaliacaoController.java</span></div><h1>AvaliacaoController.java</h1><pre class="source lang-java linenums">package app.controller;
+
+import app.entity.Avaliacao;
+import app.service.AvaliacaoService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/avaliacoes&quot;)
+<span class="nc" id="L16">public class AvaliacaoController {</span>
+
+    @Autowired
+    private AvaliacaoService avaliacaoService;
+
+    @PostMapping
+    public ResponseEntity&lt;Avaliacao&gt; createAvaliacao(@RequestBody Avaliacao avaliacao) {
+<span class="nc" id="L23">        Avaliacao savedAvaliacao = avaliacaoService.save(avaliacao);</span>
+<span class="nc" id="L24">        return new ResponseEntity&lt;&gt;(savedAvaliacao, HttpStatus.CREATED);</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Avaliacao&gt;&gt; getAllAvaliacoes() {
+<span class="nc" id="L29">        return ResponseEntity.ok(avaliacaoService.findAllOrderByDataDesc());</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Avaliacao&gt; findById(@PathVariable Long id) {
+<span class="nc" id="L34">        return avaliacaoService.findById(id)</span>
+<span class="nc" id="L35">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L36">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Avaliação não encontrada com id: &quot; + id));</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Avaliacao&gt; updateAvaliacao(
+            @PathVariable Long id,
+            @RequestBody Avaliacao avaliacaoDetails) {
+<span class="nc" id="L43">        return ResponseEntity.ok(avaliacaoService.update(id, avaliacaoDetails));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+<span class="nc" id="L48">        avaliacaoService.deleteById(id);</span>
+<span class="nc" id="L49">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @GetMapping(&quot;/cliente/{idCliente}&quot;)
+    public ResponseEntity&lt;List&lt;Avaliacao&gt;&gt; findByCliente(@PathVariable Long idCliente) {
+<span class="nc" id="L54">        return ResponseEntity.ok(avaliacaoService.findByCliente(idCliente));</span>
+    }
+
+    @GetMapping(&quot;/agendamento/{idAgendamento}&quot;)
+    public ResponseEntity&lt;List&lt;Avaliacao&gt;&gt; findByAgendamento(@PathVariable Long idAgendamento) {
+<span class="nc" id="L59">        return ResponseEntity.ok(avaliacaoService.findByAgendamento(idAgendamento));</span>
+    }
+
+    @GetMapping(&quot;/funcionario/{idFuncionario}&quot;)
+    public ResponseEntity&lt;List&lt;Avaliacao&gt;&gt; findByFuncionario(@PathVariable Long idFuncionario) {
+<span class="nc" id="L64">        return ResponseEntity.ok(avaliacaoService.findByFuncionario(idFuncionario));</span>
+    }
+
+    @GetMapping(&quot;/nota-minima/{nota}&quot;)
+    public ResponseEntity&lt;List&lt;Avaliacao&gt;&gt; findByNotaMinima(@PathVariable Integer nota) {
+<span class="nc" id="L69">        return ResponseEntity.ok(avaliacaoService.findByNotaMinima(nota));</span>
+    }
+
+    @GetMapping(&quot;/nota-range&quot;)
+    public ResponseEntity&lt;List&lt;Avaliacao&gt;&gt; findByNotaRange(
+            @RequestParam Integer notaMin,
+            @RequestParam Integer notaMax) {
+<span class="nc" id="L76">        return ResponseEntity.ok(avaliacaoService.findByNotaRange(notaMin, notaMax));</span>
+    }
+
+    @GetMapping(&quot;/media&quot;)
+    public ResponseEntity&lt;Map&lt;String, Double&gt;&gt; getMediaNotas() {
+<span class="nc" id="L81">        Double media = avaliacaoService.calcularMediaNotas();</span>
+<span class="nc" id="L82">        return ResponseEntity.ok(Map.of(&quot;media&quot;, media));</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

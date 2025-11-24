@@ -4,14 +4,14 @@ export interface Agendamento {
   observacoes?: string;
   cliente: {
     id_cliente?: number;
-    nome: string;
+    nome?: string;
   };
   funcionario: {
     id_funcionario?: number;
-    nome: string;
+    nome?: string;
   };
   servico: {
     id_servico?: number;
-    nome: string;
+    nome?: string;
   };
 }

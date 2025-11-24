@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComentarioFeed.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.entity</a> &gt; <span class="el_source">ComentarioFeed.java</span></div><h1>ComentarioFeed.java</h1><pre class="source lang-java linenums">package app.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter
+@Table(name = &quot;comentario_feed&quot;)
+<span class="nc" id="L16">public class ComentarioFeed {</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_comentario;
+
+    @NotBlank(message = &quot;O comentário é obrigatório&quot;)
+    @Column(columnDefinition = &quot;TEXT&quot;)
+    private String texto;
+
+    @Column(name = &quot;data_comentario&quot;)
+    private LocalDateTime dataComentario;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;id_post&quot;, nullable = false)
+    @NotNull(message = &quot;O post é obrigatório&quot;)
+    @JsonIgnoreProperties(&quot;comentarios&quot;)
+    private PostFeed post;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;id_cliente&quot;, nullable = false)
+    @NotNull(message = &quot;O autor é obrigatório&quot;)
+    @JsonIgnoreProperties({&quot;posts&quot;, &quot;avaliacoes&quot;, &quot;agendamentos&quot;, &quot;comentarios&quot;})
+    private Cliente autor;
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L43">        dataComentario = LocalDateTime.now();</span>
+<span class="nc" id="L44">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L49" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="nc" id="L50">        ComentarioFeed that = (ComentarioFeed) o;</span>
+<span class="nc" id="L51">        return java.util.Objects.equals(id_comentario, that.id_comentario);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L56">        return java.util.Objects.hash(id_comentario);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

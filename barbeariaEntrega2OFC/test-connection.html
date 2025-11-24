@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste de Conexão</title>
+</head>
+<body>
+    <h1>Teste de Conexão com Backend</h1>
+    <button onclick="testarConexao()">Testar Conexão</button>
+    <div id="resultado"></div>
+
+    <script>
+        async function testarConexao() {
+            const resultado = document.getElementById('resultado');
+            
+            try {
+                // Teste GET - Listar funcionários
+                const response = await fetch('http://localhost:8086/api/funcionarios');
+                
+                if (response.ok) {
+                    const funcionarios = await response.json();
+                    resultado.innerHTML = `
+                        <h3>✅ Conexão OK!</h3>
+                        <p>Funcionários encontrados: ${funcionarios.length}</p>
+                        <pre>${JSON.stringify(funcionarios, null, 2)}</pre>
+                    `;
+                } else {
+                    resultado.innerHTML = `
+                        <h3>❌ Erro na resposta</h3>
+                        <p>Status: ${response.status}</p>
+                        <p>Texto: ${await response.text()}</p>
+                    `;
+                }
+            } catch (error) {
+                resultado.innerHTML = `
+                    <h3>❌ Erro de conexão</h3>
+                    <p>Erro: ${error.message}</p>
+                    <p>Verifique se o backend está rodando na porta 8086</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

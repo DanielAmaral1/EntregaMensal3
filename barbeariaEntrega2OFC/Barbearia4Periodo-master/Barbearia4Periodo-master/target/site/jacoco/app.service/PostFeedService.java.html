@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PostFeedService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">PostFeedService.java</span></div><h1>PostFeedService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import app.entity.PostFeed;
+import app.entity.ComentarioFeed;
+import app.repository.PostFeedRepository;
+import app.repository.ComentarioFeedRepository;
+import app.repository.ClienteRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class PostFeedService {
+
+    private final PostFeedRepository postFeedRepository;
+    private final ComentarioFeedRepository comentarioFeedRepository;
+    private final ClienteRepository clienteRepository;
+
+    @Autowired
+<span class="nc" id="L24">    public PostFeedService(</span>
+            PostFeedRepository postFeedRepository,
+            ComentarioFeedRepository comentarioFeedRepository,
+            ClienteRepository clienteRepository) {
+<span class="nc" id="L28">        this.postFeedRepository = postFeedRepository;</span>
+<span class="nc" id="L29">        this.comentarioFeedRepository = comentarioFeedRepository;</span>
+<span class="nc" id="L30">        this.clienteRepository = clienteRepository;</span>
+<span class="nc" id="L31">    }</span>
+
+    public PostFeed save(PostFeed post) {
+<span class="nc bnc" id="L34" title="All 6 branches missed.">        if (post.getAutor() != null &amp;&amp; post.getAutor().getId_cliente() != null &amp;&amp; post.getAutor().getId_cliente() &gt; 0) {</span>
+<span class="nc" id="L35">            post.setAutor(clienteRepository.findById(post.getAutor().getId_cliente())</span>
+<span class="nc" id="L36">                    .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Cliente não encontrado&quot;)));</span>
+<span class="nc" id="L37">        } else {</span>
+<span class="nc" id="L38">            throw new IllegalArgumentException(&quot;Autor é obrigatório e deve ser válido&quot;);</span>
+        }
+<span class="nc" id="L40">        return postFeedRepository.save(post);</span>
+    }
+
+    public List&lt;PostFeed&gt; findAll() {
+<span class="nc" id="L44">        return postFeedRepository.findByOrderByDataPostDesc();</span>
+    }
+
+    public Optional&lt;PostFeed&gt; findById(Long id) {
+<span class="nc" id="L48">        return postFeedRepository.findById(id);</span>
+    }
+
+    public PostFeed update(Long id, PostFeed postDetails) {
+<span class="nc" id="L52">        PostFeed post = findById(id)</span>
+<span class="nc" id="L53">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Post não encontrado com id: &quot; + id));</span>
+
+<span class="nc" id="L55">        post.setConteudo(postDetails.getConteudo());</span>
+<span class="nc" id="L56">        return postFeedRepository.save(post);</span>
+    }
+
+    public void deleteById(Long id) {
+<span class="nc" id="L60">        postFeedRepository.deleteById(id);</span>
+<span class="nc" id="L61">    }</span>
+
+    @Transactional
+    public PostFeed curtirPost(Long idPost) {
+<span class="nc" id="L65">        PostFeed post = findById(idPost)</span>
+<span class="nc" id="L66">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Post não encontrado com id: &quot; + idPost));</span>
+<span class="nc" id="L67">        post.setCurtidas(post.getCurtidas() + 1);</span>
+<span class="nc" id="L68">        return postFeedRepository.save(post);</span>
+    }
+
+    @Transactional
+    public PostFeed descurtirPost(Long idPost) {
+<span class="nc" id="L73">        PostFeed post = findById(idPost)</span>
+<span class="nc" id="L74">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Post não encontrado com id: &quot; + idPost));</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (post.getCurtidas() &gt; 0) {</span>
+<span class="nc" id="L76">            post.setCurtidas(post.getCurtidas() - 1);</span>
+        }
+<span class="nc" id="L78">        return postFeedRepository.save(post);</span>
+    }
+
+    public ComentarioFeed adicionarComentario(Long idPost, ComentarioFeed comentario) {
+<span class="nc" id="L82">        PostFeed post = findById(idPost)</span>
+<span class="nc" id="L83">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Post não encontrado com id: &quot; + idPost));</span>
+
+<span class="nc bnc" id="L85" title="All 6 branches missed.">        if (comentario.getAutor() != null &amp;&amp; comentario.getAutor().getId_cliente() != null &amp;&amp; comentario.getAutor().getId_cliente() &gt; 0) {</span>
+<span class="nc" id="L86">            comentario.setAutor(clienteRepository.findById(comentario.getAutor().getId_cliente())</span>
+<span class="nc" id="L87">                    .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Cliente não encontrado&quot;)));</span>
+<span class="nc" id="L88">        } else {</span>
+<span class="nc" id="L89">            throw new IllegalArgumentException(&quot;Autor do comentário é obrigatório e deve ser válido&quot;);</span>
+        }
+
+<span class="nc" id="L92">        comentario.setPost(post);</span>
+<span class="nc" id="L93">        return comentarioFeedRepository.save(comentario);</span>
+    }
+
+    public void removerComentario(Long idComentario) {
+<span class="nc" id="L97">        comentarioFeedRepository.deleteById(idComentario);</span>
+<span class="nc" id="L98">    }</span>
+
+    public List&lt;ComentarioFeed&gt; getComentariosByPost(Long idPost) {
+<span class="nc" id="L101">        return comentarioFeedRepository.findByPostIdPost(idPost);</span>
+    }
+
+    public List&lt;PostFeed&gt; findByAutor(Long idCliente) {
+<span class="nc" id="L105">        return postFeedRepository.findByAutorIdCliente(idCliente);</span>
+    }
+
+    public List&lt;PostFeed&gt; pesquisarPorConteudo(String termo) {
+<span class="nc" id="L109">        return postFeedRepository.findByConteudoContainingIgnoreCase(termo);</span>
+    }
+
+    public List&lt;PostFeed&gt; findByCurtidasMinimas(Integer curtidas) {
+<span class="nc" id="L113">        return postFeedRepository.findByCurtidasGreaterThanEqual(curtidas);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

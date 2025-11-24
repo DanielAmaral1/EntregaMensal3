@@ -8,7 +8,7 @@ import { Avaliacao } from '../../model/avaliacoes/avaliacao.model';
 })
 export class AvaliacaoService {
 
-  private apiUrl = 'http://localhost:9090/api/avaliacoes';
+  private apiUrl = 'http://localhost:8086/api/avaliacoes';
 
   constructor(private http: HttpClient) { }
 

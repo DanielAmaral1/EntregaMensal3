@@ -34,9 +34,16 @@ export class FuncionariosComponent implements OnInit {
   }
 
   carregarFuncionarios() {
+    console.log('Carregando funcionários...');
     this.funcionarioService.findAll().subscribe({
-      next: (funcionarios) => this.funcionarios = funcionarios,
-      error: (error) => console.error('Erro ao carregar funcionários:', error)
+      next: (funcionarios) => {
+        console.log('Funcionários carregados:', funcionarios);
+        this.funcionarios = funcionarios;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar funcionários:', error);
+        alert('Erro ao carregar funcionários. Verifique se o backend está rodando.');
+      }
     });
   }
   
@@ -55,15 +62,17 @@ export class FuncionariosComponent implements OnInit {
           }
         });
       } else {
+        console.log('Salvando funcionário:', this.funcionario);
         this.funcionarioService.save(this.funcionario).subscribe({
-          next: () => {
+          next: (funcionarioSalvo) => {
+            console.log('Funcionário salvo:', funcionarioSalvo);
             alert('Funcionário cadastrado com sucesso!');
             this.resetForm();
-            this.carregarFuncionarios();
+            this.carregarFuncionarios(); // Recarrega imediatamente
           },
           error: (error) => {
             console.error('Erro ao cadastrar funcionário:', error);
-            alert('Erro ao cadastrar funcionário!');
+            alert('Erro ao cadastrar funcionário: ' + (error.error?.message || error.message));
           }
         });
       }

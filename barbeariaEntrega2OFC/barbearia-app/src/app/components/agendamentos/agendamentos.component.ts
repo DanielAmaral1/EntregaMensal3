@@ -80,16 +80,18 @@ export class AgendamentosComponent implements OnInit {
       const agendamentoData = {
         dataHora: this.agendamento.dataHora + ':00',
         observacoes: this.agendamento.observacoes || 'Nenhuma observação',
-        cliente: this.agendamento.cliente,
-        funcionario: this.agendamento.funcionario,
-        servico: this.agendamento.servico
+        cliente: { id_cliente: this.agendamento.cliente.id_cliente },
+        funcionario: { id_funcionario: this.agendamento.funcionario.id_funcionario },
+        servico: { id_servico: this.agendamento.servico.id_servico }
       };
       
-      console.log('Dados sendo enviados:');
-      console.log('Cliente:', this.agendamento.cliente);
-      console.log('Funcionario:', this.agendamento.funcionario);
-      console.log('Servico:', this.agendamento.servico);
-      console.log('Objeto completo:', agendamentoData);
+      console.log('=== DEBUG AGENDAMENTO ===');
+      console.log('Cliente selecionado:', this.agendamento.cliente);
+      console.log('Funcionario selecionado:', this.agendamento.funcionario);
+      console.log('Servico selecionado:', this.agendamento.servico);
+      console.log('Data/Hora:', this.agendamento.dataHora);
+      console.log('Objeto final enviado:', JSON.stringify(agendamentoData, null, 2));
+      console.log('========================');
 
       
       if (this.editandoAgendamento && this.agendamentoEditandoId) {
@@ -112,8 +114,12 @@ export class AgendamentosComponent implements OnInit {
             this.carregarAgendamentos();
           },
           error: (error) => {
-            console.error('Erro ao cadastrar agendamento:', error);
-            alert('Erro ao cadastrar agendamento!');
+            console.error('=== ERRO DETALHADO ===');
+            console.error('Status:', error.status);
+            console.error('Mensagem:', error.message);
+            console.error('Erro completo:', error);
+            console.error('=====================');
+            alert('Erro ao cadastrar agendamento: ' + (error.error?.message || error.message || 'Erro desconhecido'));
           }
         });
       }

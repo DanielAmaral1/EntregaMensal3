@@ -2,6 +2,8 @@ package app.repository;
 
 import app.entity.Avaliacao;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,16 +11,21 @@ import java.util.List;
 @Repository
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
     
-    List<Avaliacao> findByClienteIdCliente(Long idCliente);
+    @Query("SELECT a FROM Avaliacao a WHERE a.cliente.id_cliente = :idCliente")
+    List<Avaliacao> findByClienteId(@Param("idCliente") Long idCliente);
     
-    List<Avaliacao> findByAgendamentoIdAgendamento(Long idAgendamento);
+    @Query("SELECT a FROM Avaliacao a WHERE a.agendamento.id_agendamento = :idAgendamento")
+    List<Avaliacao> findByAgendamentoId(@Param("idAgendamento") Long idAgendamento);
     
-    List<Avaliacao> findByFuncionarioIdFuncionario(Long idFuncionario);
+    @Query("SELECT a FROM Avaliacao a WHERE a.funcionario.id_funcionario = :idFuncionario")
+    List<Avaliacao> findByFuncionarioId(@Param("idFuncionario") Long idFuncionario);
     
     List<Avaliacao> findByNotaGreaterThanEqual(Integer nota);
     
     List<Avaliacao> findByNotaBetween(Integer notaMin, Integer notaMax);
     
     List<Avaliacao> findByOrderByDataAvaliacaoDesc();
+    
+
 }
 

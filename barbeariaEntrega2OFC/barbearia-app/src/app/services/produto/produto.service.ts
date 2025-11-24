@@ -8,7 +8,7 @@ import { Produto } from '../../model/produtos/produto.model';
 })
 export class ProdutoService {
 
-  private apiUrl = 'http://localhost:9090/api/produtos';
+  private apiUrl = 'http://localhost:8086/api/produtos';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class ProdutoService {
   }
 
   findAll(): Observable<Produto[]> {
-    return this.http.get<Produto[]>('http://localhost:9090/api/test-simple/produtos');
+    return this.http.get<Produto[]>(this.apiUrl);
   }
 
   findById(id: number): Observable<Produto> {

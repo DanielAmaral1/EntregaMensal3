@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">AuthController.java</span></div><h1>AuthController.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package app.controller;</span>
+
+import app.security.JwtUtil;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/auth&quot;)
+public class AuthController {
+
+    private static final String DEFAULT_USERNAME = &quot;Master&quot;;
+    private static final String DEFAULT_PASSWORD = &quot;1234&quot;;
+<span class="nc" id="L23">    private static final List&lt;String&gt; DEFAULT_ROLES = List.of(&quot;MASTER&quot;);</span>
+
+    private final JwtUtil jwtUtil;
+
+<span class="nc" id="L27">    public AuthController(JwtUtil jwtUtil) {</span>
+<span class="nc" id="L28">        this.jwtUtil = jwtUtil;</span>
+<span class="nc" id="L29">    }</span>
+
+    @PostMapping(&quot;/login&quot;)
+    public ResponseEntity&lt;?&gt; login(@Valid @RequestBody LoginRequest request) {
+<span class="nc bnc" id="L33" title="All 4 branches missed.">        if (!DEFAULT_USERNAME.equals(request.username()) || !DEFAULT_PASSWORD.equals(request.password())) {</span>
+<span class="nc" id="L34">            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)</span>
+<span class="nc" id="L35">                    .body(Map.of(&quot;message&quot;, &quot;Usuário ou senha inválidos.&quot;));</span>
+        }
+
+<span class="nc" id="L38">        String token = jwtUtil.generateToken(DEFAULT_USERNAME, DEFAULT_ROLES);</span>
+<span class="nc" id="L39">        long expiresIn = jwtUtil.getExpirationInSeconds();</span>
+<span class="nc" id="L40">        Instant expiresAt = Instant.now().plusSeconds(expiresIn);</span>
+
+<span class="nc" id="L42">        LoginResponse response = new LoginResponse(</span>
+<span class="nc" id="L43">                DEFAULT_USERNAME,</span>
+<span class="nc" id="L44">                DEFAULT_ROLES,</span>
+<span class="nc" id="L45">                token,</span>
+<span class="nc" id="L46">                expiresIn,</span>
+<span class="nc" id="L47">                expiresAt.toString()</span>
+        );
+
+<span class="nc" id="L50">        return ResponseEntity.ok(response);</span>
+    }
+
+    public record LoginRequest(
+<span class="nc" id="L54">            @NotBlank(message = &quot;Usuário é obrigatório.&quot;) String username,</span>
+<span class="nc" id="L55">            @NotBlank(message = &quot;Senha é obrigatória.&quot;) String password</span>
+    ) {
+    }
+
+    public record LoginResponse(
+<span class="nc" id="L60">            String username,</span>
+<span class="nc" id="L61">            List&lt;String&gt; roles,</span>
+<span class="nc" id="L62">            String token,</span>
+<span class="nc" id="L63">            long expiresIn,</span>
+<span class="nc" id="L64">            String expiresAt</span>
+    ) {
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

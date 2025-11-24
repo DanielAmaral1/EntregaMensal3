@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PostFeedController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">PostFeedController.java</span></div><h1>PostFeedController.java</h1><pre class="source lang-java linenums">package app.controller;
+
+import app.entity.PostFeed;
+import app.entity.ComentarioFeed;
+import app.service.PostFeedService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/feed&quot;)
+<span class="nc" id="L17">public class PostFeedController {</span>
+
+    @Autowired
+    private PostFeedService postFeedService;
+
+    @PostMapping
+    public ResponseEntity&lt;PostFeed&gt; createPost(@RequestBody PostFeed post) {
+<span class="nc" id="L24">        PostFeed savedPost = postFeedService.save(post);</span>
+<span class="nc" id="L25">        return new ResponseEntity&lt;&gt;(savedPost, HttpStatus.CREATED);</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;PostFeed&gt;&gt; getAllPosts() {
+<span class="nc" id="L30">        return ResponseEntity.ok(postFeedService.findAll());</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;PostFeed&gt; findById(@PathVariable Long id) {
+<span class="nc" id="L35">        return postFeedService.findById(id)</span>
+<span class="nc" id="L36">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L37">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Post não encontrado com id: &quot; + id));</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;PostFeed&gt; updatePost(
+            @PathVariable Long id,
+            @RequestBody PostFeed postDetails) {
+<span class="nc" id="L44">        return ResponseEntity.ok(postFeedService.update(id, postDetails));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+<span class="nc" id="L49">        postFeedService.deleteById(id);</span>
+<span class="nc" id="L50">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @PostMapping(&quot;/{idPost}/curtir&quot;)
+    public ResponseEntity&lt;PostFeed&gt; curtirPost(@PathVariable Long idPost) {
+<span class="nc" id="L55">        return ResponseEntity.ok(postFeedService.curtirPost(idPost));</span>
+    }
+
+    @PostMapping(&quot;/{idPost}/descurtir&quot;)
+    public ResponseEntity&lt;PostFeed&gt; descurtirPost(@PathVariable Long idPost) {
+<span class="nc" id="L60">        return ResponseEntity.ok(postFeedService.descurtirPost(idPost));</span>
+    }
+
+    @PostMapping(&quot;/{idPost}/comentarios&quot;)
+    public ResponseEntity&lt;ComentarioFeed&gt; adicionarComentario(
+            @PathVariable Long idPost,
+            @RequestBody ComentarioFeed comentario) {
+<span class="nc" id="L67">        ComentarioFeed savedComentario = postFeedService.adicionarComentario(idPost, comentario);</span>
+<span class="nc" id="L68">        return new ResponseEntity&lt;&gt;(savedComentario, HttpStatus.CREATED);</span>
+    }
+
+    @GetMapping(&quot;/{idPost}/comentarios&quot;)
+    public ResponseEntity&lt;List&lt;ComentarioFeed&gt;&gt; getComentarios(@PathVariable Long idPost) {
+<span class="nc" id="L73">        return ResponseEntity.ok(postFeedService.getComentariosByPost(idPost));</span>
+    }
+
+    @DeleteMapping(&quot;/comentarios/{idComentario}&quot;)
+    public ResponseEntity&lt;Void&gt; removerComentario(@PathVariable Long idComentario) {
+<span class="nc" id="L78">        postFeedService.removerComentario(idComentario);</span>
+<span class="nc" id="L79">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @GetMapping(&quot;/autor/{idCliente}&quot;)
+    public ResponseEntity&lt;List&lt;PostFeed&gt;&gt; findByAutor(@PathVariable Long idCliente) {
+<span class="nc" id="L84">        return ResponseEntity.ok(postFeedService.findByAutor(idCliente));</span>
+    }
+
+    @GetMapping(&quot;/pesquisar&quot;)
+    public ResponseEntity&lt;List&lt;PostFeed&gt;&gt; pesquisarPorConteudo(@RequestParam String termo) {
+<span class="nc" id="L89">        return ResponseEntity.ok(postFeedService.pesquisarPorConteudo(termo));</span>
+    }
+
+    @GetMapping(&quot;/curtidas-minimas/{curtidas}&quot;)
+    public ResponseEntity&lt;List&lt;PostFeed&gt;&gt; findByCurtidasMinimas(@PathVariable Integer curtidas) {
+<span class="nc" id="L94">        return ResponseEntity.ok(postFeedService.findByCurtidasMinimas(curtidas));</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

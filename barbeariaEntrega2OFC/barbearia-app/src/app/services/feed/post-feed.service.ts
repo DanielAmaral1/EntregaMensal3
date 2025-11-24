@@ -8,7 +8,7 @@ import { PostFeed, ComentarioFeed } from '../../model/feed/post-feed.model';
 })
 export class PostFeedService {
 
-  private apiUrl = 'http://localhost:9090/api/feed';
+  private apiUrl = 'http://localhost:8086/api/feed';
 
   constructor(private http: HttpClient) { }
 

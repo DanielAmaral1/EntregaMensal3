@@ -8,7 +8,7 @@ import { Servico } from '../../model/servicos/servico.model';
 })
 export class ServicoService {
 
-  private apiUrl = 'http://localhost:9090/api/servicos';
+  private apiUrl = 'http://localhost:8086/api/servicos';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class ServicoService {
   }
 
   findAll(): Observable<Servico[]> {
-    return this.http.get<Servico[]>('http://localhost:9090/api/test-simple/servicos');
+    return this.http.get<Servico[]>(this.apiUrl);
   }
 
   findById(id: number): Observable<Servico> {

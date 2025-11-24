@@ -8,7 +8,7 @@ import { Funcionario } from '../../model/funcionarios/funcionario.model';
 })
 export class FuncionarioService {
 
-  private apiUrl = 'http://localhost:9090/api/funcionarios';
+  private apiUrl = 'http://localhost:8086/api/funcionarios';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class FuncionarioService {
   }
 
   findAll(): Observable<Funcionario[]> {
-    return this.http.get<Funcionario[]>('http://localhost:9090/api/test-simple/funcionarios');
+    return this.http.get<Funcionario[]>(this.apiUrl);
   }
 
   findById(id: number): Observable<Funcionario> {

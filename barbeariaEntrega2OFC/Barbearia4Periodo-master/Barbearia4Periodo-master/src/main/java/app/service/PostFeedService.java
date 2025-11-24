@@ -98,11 +98,11 @@ public class PostFeedService {
     }
 
     public List<ComentarioFeed> getComentariosByPost(Long idPost) {
-        return comentarioFeedRepository.findByPostIdPost(idPost);
+        return comentarioFeedRepository.findByPostId(idPost);
     }
 
     public List<PostFeed> findByAutor(Long idCliente) {
-        return postFeedRepository.findByAutorIdCliente(idCliente);
+        return postFeedRepository.findByAutorId(idCliente);
     }
 
     public List<PostFeed> pesquisarPorConteudo(String termo) {

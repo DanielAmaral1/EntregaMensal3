@@ -8,7 +8,7 @@ import { Agendamento } from '../../model/agendamentos/agendamento.model';
 })
 export class AgendamentoService {
 
-  private apiUrl = 'http://localhost:9090/api/agendamento';
+  private apiUrl = 'http://localhost:8086/api/agendamentos';
 
   constructor(private http: HttpClient) { }
 

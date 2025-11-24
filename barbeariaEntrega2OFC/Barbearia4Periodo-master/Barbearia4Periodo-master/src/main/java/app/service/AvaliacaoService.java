@@ -90,15 +90,15 @@ public class AvaliacaoService {
     }
 
     public List<Avaliacao> findByCliente(Long idCliente) {
-        return avaliacaoRepository.findByClienteIdCliente(idCliente);
+        return avaliacaoRepository.findByClienteId(idCliente);
     }
 
     public List<Avaliacao> findByAgendamento(Long idAgendamento) {
-        return avaliacaoRepository.findByAgendamentoIdAgendamento(idAgendamento);
+        return avaliacaoRepository.findByAgendamentoId(idAgendamento);
     }
 
     public List<Avaliacao> findByFuncionario(Long idFuncionario) {
-        return avaliacaoRepository.findByFuncionarioIdFuncionario(idFuncionario);
+        return avaliacaoRepository.findByFuncionarioId(idFuncionario);
     }
 
     public List<Avaliacao> findByNotaMinima(Integer nota) {

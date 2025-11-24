@@ -38,6 +38,9 @@
   </div>
 
   <div class="funcionarios-grid">
+    <div *ngIf="funcionarios.length === 0" class="no-funcionarios">
+      <p>Nenhum funcionário cadastrado ainda.</p>
+    </div>
     <div *ngFor="let f of funcionarios" class="funcionario-card card fade-in-up">
       <div class="funcionario-icon">👨💼</div>
       <h4>{{ f.nome }}</h4>
@@ -50,5 +53,10 @@
         <button class="btn btn-delete" (click)="deletarFuncionario(f)">🗑️ Deletar</button>
       </div>
     </div>
+  </div>
+  
+  <!-- Debug info -->
+  <div style="margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+    <small>Debug: Total de funcionários: {{ funcionarios.length }}</small>
   </div>
 </div>

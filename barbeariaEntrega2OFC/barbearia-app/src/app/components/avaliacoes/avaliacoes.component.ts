@@ -13,6 +13,7 @@ import { Agendamento } from '../../model/agendamentos/agendamento.model';
   styleUrls: ['./avaliacoes.component.css']
 })
 export class AvaliacoesComponent implements OnInit {
+  Math = Math;
   mostrarFormulario = false;
   editandoAvaliacao = false;
   avaliacaoEditandoId?: number;
@@ -20,7 +21,7 @@ export class AvaliacoesComponent implements OnInit {
   avaliacao: Avaliacao = {
     nota: 5,
     comentario: '',
-    cliente: { id_cliente: 0 },
+    cliente: { id_cliente: 0, nome: '' },
     agendamento: { id_agendamento: 0 }
   };
   
@@ -167,7 +168,7 @@ export class AvaliacoesComponent implements OnInit {
   private resetForm() {
     this.editandoAvaliacao = false;
     this.avaliacaoEditandoId = undefined;
-    this.avaliacao = { nota: 5, comentario: '', cliente: { id_cliente: 0 }, agendamento: { id_agendamento: 0 } };
+    this.avaliacao = { nota: 5, comentario: '', cliente: { id_cliente: 0, nome: '' }, agendamento: { id_agendamento: 0 } };
     this.limparErros();
     this.mostrarFormulario = false;
   }

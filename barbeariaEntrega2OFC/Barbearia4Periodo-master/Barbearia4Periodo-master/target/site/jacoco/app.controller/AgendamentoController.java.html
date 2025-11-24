@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AgendamentoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">AgendamentoController.java</span></div><h1>AgendamentoController.java</h1><pre class="source lang-java linenums">package app.controller;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AgendamentoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Barbearia4Periodo</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">AgendamentoController.java</span></div><h1>AgendamentoController.java</h1><pre class="source lang-java linenums">package app.controller;
 
 import app.entity.Agendamento;
 import app.service.AgendamentoService;
@@ -18,29 +18,29 @@ import java.util.List;
 
     @PostMapping
     public ResponseEntity&lt;Agendamento&gt; create(@RequestBody Agendamento agendamento) {
-<span class="fc" id="L21">        Agendamento savedAgendamento = agendamentoService.save(agendamento);</span>
-<span class="fc" id="L22">        return new ResponseEntity&lt;&gt;(savedAgendamento, HttpStatus.CREATED);</span>
+<span class="nc" id="L21">        Agendamento savedAgendamento = agendamentoService.save(agendamento);</span>
+<span class="nc" id="L22">        return new ResponseEntity&lt;&gt;(savedAgendamento, HttpStatus.CREATED);</span>
     }
 
     @GetMapping
     public ResponseEntity&lt;List&lt;Agendamento&gt;&gt; getAll() {
-<span class="fc" id="L27">        return ResponseEntity.ok(agendamentoService.findAll());</span>
+<span class="nc" id="L27">        return ResponseEntity.ok(agendamentoService.findAll());</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Agendamento&gt; findById(@PathVariable Long id) {
-<span class="fc" id="L32">        return ResponseEntity.ok(agendamentoService.findById(id));</span>
+<span class="nc" id="L32">        return ResponseEntity.ok(agendamentoService.findById(id));</span>
     }
 
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Agendamento&gt; update(@PathVariable Long id, @RequestBody Agendamento agendamentoDetails) {
-<span class="fc" id="L37">        return ResponseEntity.ok(agendamentoService.update(id, agendamentoDetails));</span>
+<span class="nc" id="L37">        return ResponseEntity.ok(agendamentoService.update(id, agendamentoDetails));</span>
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
-<span class="fc" id="L42">        agendamentoService.deleteById(id);</span>
-<span class="fc" id="L43">        return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L42">        agendamentoService.deleteById(id);</span>
+<span class="nc" id="L43">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

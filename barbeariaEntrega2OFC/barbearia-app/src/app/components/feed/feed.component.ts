@@ -17,7 +17,7 @@ export class FeedComponent implements OnInit {
   
   post: PostFeed = {
     conteudo: '',
-    autor: { id_cliente: 0 }
+    autor: { id_cliente: 0, nome: '' }
   };
   
   posts: PostFeed[] = [];
@@ -201,13 +201,15 @@ export class FeedComponent implements OnInit {
 
     const comentario: ComentarioFeed = {
       texto: this.novoComentario[post.id_post],
-      autor: { id_cliente: this.clientes[0].id_cliente }
+      autor: { id_cliente: this.clientes[0].id_cliente || 0 }
     };
 
     this.postFeedService.adicionarComentario(post.id_post, comentario).subscribe({
       next: () => {
         this.novoComentario[post.id_post!] = '';
-        this.carregarComentarios(post.id_post);
+        if (post.id_post) {
+          this.carregarComentarios(post.id_post);
+        }
         alert('Comentário adicionado com sucesso!');
       },
       error: (error) => {
@@ -238,7 +240,7 @@ export class FeedComponent implements OnInit {
   private resetForm() {
     this.editandoPost = false;
     this.postEditandoId = undefined;
-    this.post = { conteudo: '', autor: { id_cliente: 0 } };
+    this.post = { conteudo: '', autor: { id_cliente: 0, nome: '' } };
     this.limparErros();
     this.mostrarFormulario = false;
   }

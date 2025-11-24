@@ -9,10 +9,12 @@ import { ProdutosComponent } from './components/produtos/produtos.component';
 import { AvaliacoesComponent } from './components/avaliacoes/avaliacoes.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './pages/login/login.component';
+import { TestFuncionarioComponent } from './test-funcionario.component';
 import { AuthGuard } from './core/auth/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'test-funcionario', component: TestFuncionarioComponent },
   { path: '', component: PagInicialComponent, canActivate: [AuthGuard] },
   { path: 'clientes', component: ClientesComponent, canActivate: [AuthGuard] },
   { path: 'agendamentos', component: AgendamentosComponent, canActivate: [AuthGuard] },

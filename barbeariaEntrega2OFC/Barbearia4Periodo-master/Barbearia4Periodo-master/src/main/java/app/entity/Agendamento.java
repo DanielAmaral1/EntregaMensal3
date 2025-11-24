@@ -43,13 +43,14 @@ public class Agendamento {
     @JsonIgnoreProperties("agendamentos")
     private Servico servico;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "agendamento_produto",
             joinColumns = @JoinColumn(name = "id_agendamento"),
             inverseJoinColumns = @JoinColumn(name = "id_produto")
     )
     @JsonIgnoreProperties("agendamentos")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Produto> produtos;
 
     @Override

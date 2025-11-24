@@ -113,10 +113,12 @@ export class FeedComponent implements OnInit {
         });
       } else {
         this.postFeedService.save(this.post).subscribe({
-          next: () => {
+          next: (novoPost) => {
             alert('Post publicado com sucesso!');
             this.resetForm();
-            this.carregarPosts();
+            // Adiciona o novo post no início da lista
+            this.posts.unshift(novoPost);
+            this.postsFiltrados = [...this.posts];
           },
           error: (error) => {
             console.error('Erro ao publicar post:', error);

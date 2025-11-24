@@ -58,12 +58,15 @@
   </div>
 
   <div class="agendamentos-grid">
+    <div *ngIf="agendamentos.length === 0" class="no-agendamentos">
+      <p>Nenhum agendamento cadastrado ainda.</p>
+    </div>
     <div *ngFor="let a of agendamentos" class="agendamento-card card fade-in-up">
       <div class="agendamento-icon">📅</div>
-      <h4>{{ a.cliente.nome }}</h4>
+      <h4>{{ a.cliente?.nome || 'Cliente não informado' }}</h4>
       <div class="agendamento-info">
-        <p>👨💼 {{ a.funcionario.nome }}</p>
-        <p>✂️ {{ a.servico.nome }}</p>
+        <p>👨💼 {{ a.funcionario?.nome || 'Funcionário não informado' }}</p>
+        <p>✂️ {{ a.servico?.nome || 'Serviço não informado' }}</p>
         <p>📆 {{ a.dataHora | date:'dd/MM/yyyy HH:mm' }}</p>
         <p>📝 {{ a.observacoes || 'Nenhuma observação' }}</p>
       </div>

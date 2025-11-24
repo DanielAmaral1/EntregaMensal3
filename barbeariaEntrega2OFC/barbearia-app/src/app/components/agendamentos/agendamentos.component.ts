@@ -47,9 +47,16 @@ export class AgendamentosComponent implements OnInit {
   }
 
   carregarAgendamentos() {
+    console.log('Carregando agendamentos...');
     this.agendamentoService.getAll().subscribe({
-      next: (agendamentos) => this.agendamentos = agendamentos,
-      error: (error) => console.error('Erro ao carregar agendamentos:', error)
+      next: (agendamentos) => {
+        console.log('Agendamentos carregados:', agendamentos);
+        this.agendamentos = agendamentos;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar agendamentos:', error);
+        alert('Erro ao carregar agendamentos. Verifique se o backend está rodando.');
+      }
     });
   }
 
@@ -108,10 +115,11 @@ export class AgendamentosComponent implements OnInit {
         });
       } else {
         this.agendamentoService.create(agendamentoData).subscribe({
-          next: () => {
+          next: (agendamentoCriado) => {
+            console.log('Agendamento criado:', agendamentoCriado);
             alert('Agendamento cadastrado com sucesso!');
             this.resetForm();
-            this.carregarAgendamentos();
+            setTimeout(() => this.carregarAgendamentos(), 500);
           },
           error: (error) => {
             console.error('=== ERRO DETALHADO ===');

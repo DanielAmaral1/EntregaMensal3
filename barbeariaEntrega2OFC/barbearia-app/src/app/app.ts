@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent implements OnInit {
   clientes: any[] = [];
-  cliente = { nome: '', celular: '', email: '', idade: null };
+  cliente = { nome: '', celular: '', email: '' };
   backendStatus = false;
   private apiUrl = 'http://localhost:8080/api/clientes';
 
@@ -32,12 +32,11 @@ export class AppComponent implements OnInit {
     });
   }
 
-  cadastrarCliente(nome: string, celular: string, email: string, idade: string) {
+  cadastrarCliente(nome: string, celular: string, email: string) {
     const cliente = {
       nome: nome,
       celular: celular,
-      email: email,
-      idade: parseInt(idade)
+      email: email
     };
     
     this.http.post(this.apiUrl, cliente).subscribe({

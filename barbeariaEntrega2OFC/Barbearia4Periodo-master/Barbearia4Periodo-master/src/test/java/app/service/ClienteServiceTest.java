@@ -38,7 +38,7 @@ class ClienteServiceTest {
         cliente.setNome("João Silva");
         cliente.setEmail("joao@email.com");
         cliente.setCelular("11-987654321");
-        cliente.setIdade(30);
+
     }
 
     @Test

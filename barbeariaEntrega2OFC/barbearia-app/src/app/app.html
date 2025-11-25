@@ -7,8 +7,7 @@
       <input type="text" #nome placeholder="Nome" required style="padding: 8px;">
       <input type="tel" #celular placeholder="Celular" required style="padding: 8px;">
       <input type="email" #email placeholder="Email" required style="padding: 8px;">
-      <input type="number" #idade placeholder="Idade" required style="padding: 8px;">
-      <button (click)="cadastrarCliente(nome.value, celular.value, email.value, idade.value)" style="padding: 10px; background: #007bff; color: white; border: none; border-radius: 3px;">
+      <button (click)="cadastrarCliente(nome.value, celular.value, email.value)" style="padding: 10px; background: #007bff; color: white; border: none; border-radius: 3px;">
         💾 Salvar Cliente
       </button>
     </div>
@@ -20,7 +19,7 @@
       <strong>{{c.nome}}</strong><br>
       📱 {{c.celular}}<br>
       ✉️ {{c.email}}<br>
-      🎂 {{c.idade}} anos
+
       <br><br>
       <button (click)="deletarCliente(c)" style="padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 3px;">
         🗑️ Deletar

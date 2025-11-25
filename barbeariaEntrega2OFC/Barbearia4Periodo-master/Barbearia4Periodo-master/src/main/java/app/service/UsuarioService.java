@@ -4,6 +4,7 @@ import app.entity.Usuario;
 import app.repository.UsuarioRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    
+    @Value("${master.password}")
+    private String masterPassword;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
@@ -26,7 +30,7 @@ public class UsuarioService {
         if (!usuarioRepository.existsByUsername("Master")) {
             Usuario usuario = new Usuario();
             usuario.setUsername("Master");
-            usuario.setPassword(passwordEncoder.encode("1234"));
+            usuario.setPassword(passwordEncoder.encode(masterPassword));
             usuario.setRole("MASTER");
             usuarioRepository.save(usuario);
         }

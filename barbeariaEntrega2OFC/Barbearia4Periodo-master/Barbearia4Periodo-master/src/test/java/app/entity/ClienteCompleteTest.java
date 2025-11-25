@@ -12,13 +12,11 @@ class ClienteCompleteTest {
         cliente.setNome("João Silva");
         cliente.setEmail("joao@email.com");
         cliente.setCelular("11-987654321");
-        cliente.setIdade(30);
 
         assertEquals(1L, cliente.getId_cliente());
         assertEquals("João Silva", cliente.getNome());
         assertEquals("joao@email.com", cliente.getEmail());
         assertEquals("11-987654321", cliente.getCelular());
-        assertEquals(30, cliente.getIdade());
     }
 
     @Test
@@ -29,13 +27,11 @@ class ClienteCompleteTest {
         cliente.setNome("Maria Santos");
         cliente.setEmail("maria@email.com");
         cliente.setCelular("11-123456789");
-        cliente.setIdade(25);
 
         assertEquals(2L, cliente.getId_cliente());
         assertEquals("Maria Santos", cliente.getNome());
         assertEquals("maria@email.com", cliente.getEmail());
         assertEquals("11-123456789", cliente.getCelular());
-        assertEquals(25, cliente.getIdade());
     }
 
     @Test

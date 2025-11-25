@@ -36,9 +36,7 @@ export class ClienteService {
     return this.http.get<Cliente[]>(`${this.apiUrl}/by-nome?nome=${nome}`);
   }
 
-  buscarPorIdade(idade: number): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(`${this.apiUrl}/by-idade?idade=${idade}`);
-  }
+
 
   pesquisarGlobal(termo: string): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(`${this.apiUrl}/pesquisar?termo=${termo}`);

@@ -15,16 +15,15 @@ export class ClientesComponent {
   cliente = {
     nome: '',
     celular: '',
-    email: '',
-    idade: null
+    email: ''
   };
   
   clientes: any[] = [];
   
   cadastrarCliente() {
-    if (this.cliente.nome && this.cliente.celular && this.cliente.email && this.cliente.idade) {
+    if (this.cliente.nome && this.cliente.celular && this.cliente.email) {
       this.clientes.push({ ...this.cliente });
-      this.cliente = { nome: '', celular: '', email: '', idade: null };
+      this.cliente = { nome: '', celular: '', email: '' };
       this.mostrarFormulario = false;
       alert('Cliente cadastrado com sucesso!');
     }

@@ -47,13 +47,7 @@ class ClienteTest {
         assertEquals(celular, cliente.getCelular());
     }
 
-    @Test
-    @DisplayName("TESTE DE UNIDADE - Cenário de teste dos getters e setters da idade")
-    void testIdadeGetterSetter() {
-        Integer idade = 30;
-        cliente.setIdade(idade);
-        assertEquals(idade, cliente.getIdade());
-    }
+
 
     @Test
     @DisplayName("TESTE DE UNIDADE - Cenário de criação de cliente com construtor padrão")
@@ -64,6 +58,6 @@ class ClienteTest {
         assertNull(novoCliente.getNome());
         assertNull(novoCliente.getEmail());
         assertNull(novoCliente.getCelular());
-        assertNull(novoCliente.getIdade());
+
     }
 }

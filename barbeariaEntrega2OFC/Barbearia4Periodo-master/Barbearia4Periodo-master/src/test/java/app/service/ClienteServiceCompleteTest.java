@@ -35,7 +35,7 @@ class ClienteServiceCompleteTest {
         cliente.setNome("Maria Silva");
         cliente.setEmail("maria@email.com");
         cliente.setCelular("11-987654321");
-        cliente.setIdade(25);
+
     }
 
     @Test
@@ -74,17 +74,7 @@ class ClienteServiceCompleteTest {
         verify(clienteRepository, times(1)).findByNomeContaining("Maria");
     }
 
-    @Test
-    @DisplayName("TESTE DE UNIDADE - Cenário de sucesso ao buscar por idade")
-    void testBuscarPorIdadeSuccess() {
-        when(clienteRepository.findByIdadeGreaterThanEqual(25)).thenReturn(Arrays.asList(cliente));
-        
-        List<Cliente> resultado = clienteService.buscarPorIdade(25);
-        
-        assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        verify(clienteRepository, times(1)).findByIdadeGreaterThanEqual(25);
-    }
+
 
     @Test
     @DisplayName("TESTE DE UNIDADE - Cenário de pesquisa global com termo vazio")
@@ -104,13 +94,11 @@ class ClienteServiceCompleteTest {
         when(clienteRepository.findByNomeContaining("25")).thenReturn(Arrays.asList());
         when(clienteRepository.findByEmailContainingIgnoreCase("25")).thenReturn(Arrays.asList());
         when(clienteRepository.findByCelularContaining("25")).thenReturn(Arrays.asList());
-        when(clienteRepository.findByIdadeGreaterThanEqual(25)).thenReturn(Arrays.asList(cliente));
         
         List<Cliente> resultado = clienteService.pesquisarGlobal("25");
         
         assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        verify(clienteRepository, times(1)).findByIdadeGreaterThanEqual(25);
+        assertEquals(0, resultado.size());
     }
 
     @Test
@@ -120,7 +108,7 @@ class ClienteServiceCompleteTest {
         clienteAtualizado.setNome("Maria Santos");
         clienteAtualizado.setEmail("maria.santos@email.com");
         clienteAtualizado.setCelular("11-999888777");
-        clienteAtualizado.setIdade(26);
+
         
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
         when(clienteRepository.save(any(Cliente.class))).thenReturn(clienteAtualizado);

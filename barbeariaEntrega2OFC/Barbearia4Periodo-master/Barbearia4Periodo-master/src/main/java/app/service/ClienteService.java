@@ -41,7 +41,7 @@ public class ClienteService {
         cliente.setNome(clienteDetails.getNome());
         cliente.setCelular(clienteDetails.getCelular());
         cliente.setEmail(clienteDetails.getEmail());
-        cliente.setIdade(clienteDetails.getIdade());
+
 
         return clienteRepository.save(cliente);
     }
@@ -59,9 +59,7 @@ public class ClienteService {
         return  clienteRepository.findByNomeContaining(nome);
     }
 
-    public List<Cliente> buscarPorIdade(Integer idade){
-        return clienteRepository.findByIdadeGreaterThanEqual(idade);
-    }
+
 
     public List<Cliente> pesquisarGlobal(String termo) {
         if (termo == null || termo.trim().isEmpty()) {
@@ -80,13 +78,7 @@ public class ClienteService {
         // Buscar por celular
         resultados.addAll(clienteRepository.findByCelularContaining(termo));
         
-        // Buscar por idade
-        try {
-            Integer idade = Integer.parseInt(termo);
-            resultados.addAll(clienteRepository.findByIdadeGreaterThanEqual(idade));
-        } catch (NumberFormatException e) {
-            // Ignorar se não for número
-        }
+
         
         // Remover duplicatas
         return resultados.stream().distinct().collect(java.util.stream.Collectors.toList());

@@ -3,6 +3,7 @@ package app.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -14,12 +15,15 @@ import javax.crypto.SecretKey;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "change-me-in-production-master-secret-key-123456";
-    private static final Duration EXPIRATION = Duration.ofHours(1);
+    @Value("${jwt.secret}")
+    private String secretKey;
+    
+    @Value("${jwt.expiration:3600}")
+    private long expirationSeconds;
 
     public String generateToken(String username, List<String> roles) {
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + EXPIRATION.toMillis());
+        Date expiration = new Date(now.getTime() + (expirationSeconds * 1000));
 
         return Jwts.builder()
                 .subject(username)
@@ -49,7 +53,7 @@ public class JwtUtil {
     }
 
     public long getExpirationInSeconds() {
-        return EXPIRATION.toSeconds();
+        return expirationSeconds;
     }
 
     private boolean isTokenExpired(String token) {
@@ -65,7 +69,7 @@ public class JwtUtil {
     }
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

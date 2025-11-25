@@ -60,10 +60,7 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.buscarPorNome(nome));
     }
 
-    @GetMapping("/by-idade")
-    public ResponseEntity<List<Cliente>> buscarPorIdade(@RequestParam Integer idade) {
-        return ResponseEntity.ok(clienteService.buscarPorIdade(idade));
-    }
+
 
     @GetMapping("/pesquisar")
     public ResponseEntity<List<Cliente>> pesquisarGlobal(@RequestParam String termo) {

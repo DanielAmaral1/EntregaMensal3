@@ -43,7 +43,7 @@ class ClienteControllerTest {
         cliente.setNome("João Silva");
         cliente.setEmail("joao@email.com");
         cliente.setCelular("11-987654321");
-        cliente.setIdade(30);
+
     }
 
     @Test
@@ -126,17 +126,7 @@ class ClienteControllerTest {
                 .andExpect(jsonPath("$[0].nome").value("João Silva"));
     }
 
-    @Test
-    @DisplayName("TESTE DE INTEGRAÇÃO - Cenário de busca por idade com resultados")
-    void testBuscarPorIdade() throws Exception {
-        List<Cliente> clientes = Arrays.asList(cliente);
-        when(clienteService.buscarPorIdade(30)).thenReturn(clientes);
 
-        mockMvc.perform(get("/clientes/by-idade")
-                .param("idade", "30"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idade").value(30));
-    }
 
 //cobertura de casos limites e excecoes
     @Test

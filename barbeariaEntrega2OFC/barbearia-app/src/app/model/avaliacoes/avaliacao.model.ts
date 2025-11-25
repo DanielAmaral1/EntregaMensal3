@@ -7,7 +7,7 @@ export interface Avaliacao {
     id_cliente: number;
     nome?: string;
   };
-  agendamento?: {
+  agendamento: {
     id_agendamento: number;
   };
   funcionario?: {

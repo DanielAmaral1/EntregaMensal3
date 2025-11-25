@@ -37,7 +37,8 @@ public class Avaliacao {
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "id_agendamento", nullable = true)
+    @JoinColumn(name = "id_agendamento", nullable = false)
+    @NotNull(message = "O agendamento é obrigatório")
     @JsonIgnoreProperties({"avaliacoes", "cliente", "funcionario", "servico", "produtos"})
     private Agendamento agendamento;
 

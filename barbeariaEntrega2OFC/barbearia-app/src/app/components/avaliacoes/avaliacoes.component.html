@@ -44,14 +44,15 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="agendamento">Agendamento (opcional):</label>
+        <label class="form-label" for="agendamento">Agendamento:</label>
         <select class="form-input" id="agendamento" name="agendamento" 
-                [(ngModel)]="avaliacao.agendamento.id_agendamento">
-          <option [value]="0">Nenhum</option>
+                [(ngModel)]="avaliacao.agendamento.id_agendamento" required>
+          <option value="">Selecione um agendamento</option>
           <option *ngFor="let a of agendamentos" [value]="a.id_agendamento">
-            {{ a.dataHora }} - {{ a.cliente?.nome }}
+            {{ a.dataHora | date:'dd/MM/yyyy HH:mm' }} - {{ a.servico?.nome }}
           </option>
         </select>
+        <div *ngIf="erros.agendamento" class="error-message">{{ erros.agendamento }}</div>
       </div>
       
       <div class="form-group">

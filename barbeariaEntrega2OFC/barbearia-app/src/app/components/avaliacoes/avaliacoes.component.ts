@@ -35,7 +35,8 @@ export class AvaliacoesComponent implements OnInit {
   
   erros = {
     nota: '',
-    cliente: ''
+    cliente: '',
+    agendamento: ''
   };
 
   constructor(
@@ -215,12 +216,13 @@ export class AvaliacoesComponent implements OnInit {
     
     if (!this.validarNota()) valido = false;
     if (!this.validarCliente()) valido = false;
+    if (!this.validarAgendamento()) valido = false;
     
     return valido;
   }
 
   private limparErros(): void {
-    this.erros = { nota: '', cliente: '' };
+    this.erros = { nota: '', cliente: '', agendamento: '' };
   }
 
   private validarNota(): boolean {
@@ -237,6 +239,14 @@ export class AvaliacoesComponent implements OnInit {
         this.erros.cliente = 'Selecione um cliente!';
         return false;
       }
+    }
+    return true;
+  }
+
+  private validarAgendamento(): boolean {
+    if (!this.avaliacao.agendamento || !this.avaliacao.agendamento.id_agendamento) {
+      this.erros.agendamento = 'Selecione um agendamento!';
+      return false;
     }
     return true;
   }

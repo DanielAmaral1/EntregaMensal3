@@ -13,6 +13,7 @@ C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Ba
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\controller\SimpleController.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\controller\TestController.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\controller\TestSimpleController.java
+C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\controller\UsuarioController.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\Agendamento.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\Avaliacao.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\Cliente.java
@@ -24,6 +25,7 @@ C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Ba
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\ProdutoSimple.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\Servico.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\ServicoSimple.java
+C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\entity\Usuario.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\AgendamentoRepository.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\AvaliacaoRepository.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\ClienteRepository.java
@@ -35,6 +37,7 @@ C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Ba
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\ProdutoSimpleRepository.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\ServicoRepository.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\ServicoSimpleRepository.java
+C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\repository\UsuarioRepository.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\security\JwtAuthFilter.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\security\JwtUtil.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\service\AgendamentoService.java
@@ -44,3 +47,4 @@ C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Ba
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\service\PostFeedService.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\service\ProdutoService.java
 C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\service\ServicoService.java
+C:\Users\luizp\EntregaMensal3-4\barbeariaEntrega2OFC\Barbearia4Periodo-master\Barbearia4Periodo-master\src\main\java\app\service\UsuarioService.java

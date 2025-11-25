@@ -1,8 +1,11 @@
 package app.controller;
 
+import app.entity.Usuario;
 import app.security.JwtUtil;
+import app.service.UsuarioService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,30 +21,32 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private static final String DEFAULT_USERNAME = "Master";
-    private static final String DEFAULT_PASSWORD = "1234";
-    private static final List<String> DEFAULT_ROLES = List.of("MASTER");
-
     private final JwtUtil jwtUtil;
+    private final UsuarioService usuarioService;
 
-    public AuthController(JwtUtil jwtUtil) {
+    @Autowired
+    public AuthController(JwtUtil jwtUtil, UsuarioService usuarioService) {
         this.jwtUtil = jwtUtil;
+        this.usuarioService = usuarioService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
-        if (!DEFAULT_USERNAME.equals(request.username()) || !DEFAULT_PASSWORD.equals(request.password())) {
+        if (!usuarioService.validarCredenciais(request.username(), request.password())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Usuário ou senha inválidos."));
         }
 
-        String token = jwtUtil.generateToken(DEFAULT_USERNAME, DEFAULT_ROLES);
+        Usuario usuario = usuarioService.findByUsername(request.username()).orElseThrow();
+        List<String> roles = List.of(usuario.getRole());
+        
+        String token = jwtUtil.generateToken(usuario.getUsername(), roles);
         long expiresIn = jwtUtil.getExpirationInSeconds();
         Instant expiresAt = Instant.now().plusSeconds(expiresIn);
 
         LoginResponse response = new LoginResponse(
-                DEFAULT_USERNAME,
-                DEFAULT_ROLES,
+                usuario.getUsername(),
+                roles,
                 token,
                 expiresIn,
                 expiresAt.toString()

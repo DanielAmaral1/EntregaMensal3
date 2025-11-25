@@ -18,7 +18,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
-  private readonly apiUrl = 'http://localhost:9090/api/auth';
+  private readonly apiUrl = 'http://localhost:8086/api/auth';
   private readonly tokenKey = 'barbearia.token';
   private readonly expiresKey = 'barbearia.token.exp';
   private readonly rolesKey = 'barbearia.roles';

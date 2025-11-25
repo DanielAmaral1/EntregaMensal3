@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,17 +21,20 @@ public class PostFeedController {
     private PostFeedService postFeedService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<PostFeed> createPost(@RequestBody PostFeed post) {
         PostFeed savedPost = postFeedService.save(post);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<List<PostFeed>> getAllPosts() {
         return ResponseEntity.ok(postFeedService.findAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<PostFeed> findById(@PathVariable Long id) {
         return postFeedService.findById(id)
                 .map(ResponseEntity::ok)
@@ -38,6 +42,7 @@ public class PostFeedController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<PostFeed> updatePost(
             @PathVariable Long id,
             @RequestBody PostFeed postDetails) {
@@ -45,6 +50,7 @@ public class PostFeedController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         postFeedService.deleteById(id);
         return ResponseEntity.noContent().build();

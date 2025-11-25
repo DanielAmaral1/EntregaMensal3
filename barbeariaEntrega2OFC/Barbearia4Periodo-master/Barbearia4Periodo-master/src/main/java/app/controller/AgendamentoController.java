@@ -5,6 +5,7 @@ import app.service.AgendamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +18,32 @@ public class AgendamentoController {
     private AgendamentoService agendamentoService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<Agendamento> create(@RequestBody Agendamento agendamento) {
         Agendamento savedAgendamento = agendamentoService.save(agendamento);
         return new ResponseEntity<>(savedAgendamento, HttpStatus.CREATED);
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<List<Agendamento>> getAll() {
         return ResponseEntity.ok(agendamentoService.findAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<Agendamento> findById(@PathVariable Long id) {
         return ResponseEntity.ok(agendamentoService.findById(id));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<Agendamento> update(@PathVariable Long id, @RequestBody Agendamento agendamentoDetails) {
         return ResponseEntity.ok(agendamentoService.update(id, agendamentoDetails));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         agendamentoService.deleteById(id);
         return ResponseEntity.noContent().build();

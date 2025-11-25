@@ -41,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String servletPath = request.getServletPath();
-        if ("/auth/login".equals(servletPath)) {
+        if (servletPath.startsWith("/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,15 +54,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     if (jwtUtil.isTokenValid(token, username)) {
                         List<String> roles = jwtUtil.extractRoles(token);
+                        System.out.println("JWT Filter - Username: " + username);
+                        System.out.println("JWT Filter - Roles: " + roles);
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                                 username,
                                 null,
                                 roles.stream()
-                                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                                        .map(role -> new SimpleGrantedAuthority(role))
                                         .collect(Collectors.toList())
                         );
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
+                        System.out.println("JWT Filter - Authentication set successfully");
+                    } else {
+                        System.out.println("JWT Filter - Token invalid for user: " + username);
                     }
                 }
             } catch (Exception ex) {

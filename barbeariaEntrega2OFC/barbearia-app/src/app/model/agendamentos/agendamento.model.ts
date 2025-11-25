@@ -13,5 +13,6 @@ export interface Agendamento {
   servico: {
     id_servico?: number;
     nome?: string;
+    duracaoMinutos?: number;
   };
 }

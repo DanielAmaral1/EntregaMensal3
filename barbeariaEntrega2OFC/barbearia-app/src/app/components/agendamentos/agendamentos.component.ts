@@ -25,8 +25,29 @@ export class AgendamentosComponent implements OnInit {
     observacoes: '',
     cliente: { nome: '' },
     funcionario: { nome: '' },
-    servico: { nome: '' }
+    servico: { nome: '', duracaoMinutos: 60 }
   };
+  
+  agendamentoData: string = '';
+  agendamentoHora: string = '';
+  
+  currentMonth: number = new Date().getMonth();
+  currentYear: number = new Date().getFullYear();
+  selectedDate: Date | null = null;
+  
+  horariosBase: string[] = [
+    '08:00', '08:15', '08:30', '08:45',
+    '09:00', '09:15', '09:30', '09:45',
+    '10:00', '10:15', '10:30', '10:45',
+    '11:00', '11:15', '11:30', '11:45',
+    '12:00', '12:15', '12:30', '12:45',
+    '13:00', '13:15', '13:30', '13:45',
+    '14:00', '14:15', '14:30', '14:45',
+    '15:00', '15:15', '15:30', '15:45',
+    '16:00', '16:15', '16:30', '16:45',
+    '17:00', '17:15', '17:30', '17:45',
+    '18:00'
+  ];
   
   agendamentos: Agendamento[] = [];
   clientes: Cliente[] = [];
@@ -110,10 +131,13 @@ export class AgendamentosComponent implements OnInit {
   }
   
   cadastrarAgendamento() {
-    if (this.agendamento.cliente && this.agendamento.funcionario && this.agendamento.servico && this.agendamento.dataHora) {
+    if (this.agendamento.cliente && this.agendamento.funcionario && this.agendamento.servico && this.agendamentoData && this.agendamentoHora) {
+      
+      // Combinar data e hora
+      const dataHoraCompleta = `${this.agendamentoData}T${this.agendamentoHora}:00`;
 
-      const agendamentoData = {
-        dataHora: this.agendamento.dataHora + ':00',
+      const agendamentoData: any = {
+        dataHora: dataHoraCompleta,
         observacoes: this.agendamento.observacoes || 'Nenhuma observação',
         cliente: { id_cliente: this.agendamento.cliente.id_cliente },
         funcionario: { id_funcionario: this.agendamento.funcionario.id_funcionario },
@@ -124,7 +148,9 @@ export class AgendamentosComponent implements OnInit {
       console.log('Cliente selecionado:', this.agendamento.cliente);
       console.log('Funcionario selecionado:', this.agendamento.funcionario);
       console.log('Servico selecionado:', this.agendamento.servico);
-      console.log('Data/Hora:', this.agendamento.dataHora);
+      console.log('Data:', this.agendamentoData);
+      console.log('Hora:', this.agendamentoHora);
+      console.log('Data/Hora combinada:', dataHoraCompleta);
       console.log('Objeto final enviado:', JSON.stringify(agendamentoData, null, 2));
       console.log('========================');
 
@@ -164,6 +190,14 @@ export class AgendamentosComponent implements OnInit {
   
   editarAgendamento(agendamento: Agendamento) {
     this.agendamento = { ...agendamento };
+    
+    // Separar data e hora para edição
+    if (agendamento.dataHora) {
+      const dataHora = new Date(agendamento.dataHora);
+      this.agendamentoData = dataHora.toISOString().split('T')[0];
+      this.agendamentoHora = dataHora.toTimeString().substring(0, 5);
+    }
+    
     this.editandoAgendamento = true;
     this.agendamentoEditandoId = agendamento.id_agendamento;
     this.mostrarFormulario = true;
@@ -190,10 +224,146 @@ export class AgendamentosComponent implements OnInit {
     this.resetForm();
   }
 
+  getCurrentMonthYear(): string {
+    const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    return `${months[this.currentMonth]} ${this.currentYear}`;
+  }
+
+  previousMonth(): void {
+    if (this.currentMonth === 0) {
+      this.currentMonth = 11;
+      this.currentYear--;
+    } else {
+      this.currentMonth--;
+    }
+  }
+
+  nextMonth(): void {
+    if (this.currentMonth === 11) {
+      this.currentMonth = 0;
+      this.currentYear++;
+    } else {
+      this.currentMonth++;
+    }
+  }
+
+  getCalendarDays(): any[] {
+    const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - firstDay.getDay());
+    
+    const days = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zerar horas para comparação correta
+    
+    for (let i = 0; i < 42; i++) {
+      const date = new Date(startDate.getTime() + (i * 24 * 60 * 60 * 1000));
+      const isCurrentMonth = date.getMonth() === this.currentMonth;
+      const dateOnly = new Date(date);
+      dateOnly.setHours(0, 0, 0, 0);
+      const isPastDate = dateOnly < today;
+      
+      days.push({
+        day: date.getDate(),
+        date: date,
+        currentMonth: isCurrentMonth,
+        enabled: isCurrentMonth && !isPastDate
+      });
+    }
+    
+    return days;
+  }
+
+  selectDay(day: any): void {
+    if (day.enabled) {
+      this.selectedDate = day.date;
+      this.agendamentoData = day.date.toISOString().split('T')[0];
+    }
+  }
+
+  isSelectedDay(day: any): boolean {
+    return this.selectedDate && 
+           this.selectedDate.toDateString() === day.date.toDateString();
+  }
+
+  getHorariosDisponiveis(): any[] {
+    if (!this.agendamentoData || !this.agendamento.funcionario?.id_funcionario) {
+      return this.horariosBase.map(h => ({ value: h, label: h, disponivel: true }));
+    }
+
+    return this.horariosBase.map(horario => {
+      const disponivel = this.isHorarioDisponivel(horario);
+      return {
+        value: horario,
+        label: horario,
+        disponivel: disponivel
+      };
+    });
+  }
+
+  isHorarioDisponivel(horario: string): boolean {
+    if (!this.agendamentoData || !this.agendamento.funcionario?.id_funcionario) {
+      return true;
+    }
+
+    const dataHorarioSelecionado = new Date(`${this.agendamentoData}T${horario}:00`);
+    const funcionarioId = this.agendamento.funcionario.id_funcionario;
+    const servicoDuracao = this.agendamento.servico?.duracaoMinutos || 60;
+
+    // Verificar conflitos com agendamentos existentes
+    for (const agendamento of this.agendamentos) {
+      // Pular o agendamento atual se estiver editando
+      if (this.editandoAgendamento && agendamento.id_agendamento === this.agendamentoEditandoId) {
+        continue;
+      }
+
+      // Verificar se é o mesmo funcionário
+      if (agendamento.funcionario?.id_funcionario !== funcionarioId) {
+        continue;
+      }
+
+      // Verificar se é o mesmo dia
+      const agendamentoDataExistente = new Date(agendamento.dataHora!);
+      if (agendamentoDataExistente.toDateString() !== dataHorarioSelecionado.toDateString()) {
+        continue;
+      }
+
+      // Calcular horário de início e fim do agendamento existente
+      const inicioExistente = agendamentoDataExistente;
+      const duracaoExistente = agendamento.servico?.duracaoMinutos || 60;
+      const fimExistente = new Date(inicioExistente.getTime() + duracaoExistente * 60000);
+
+      // Calcular horário de início e fim do novo agendamento
+      const inicioNovo = dataHorarioSelecionado;
+      const fimNovo = new Date(inicioNovo.getTime() + servicoDuracao * 60000);
+
+      // Verificar sobreposição de horários
+      if ((inicioNovo < fimExistente) && (fimNovo > inicioExistente)) {
+        return false; // Há conflito
+      }
+    }
+
+    return true; // Horário disponível
+  }
+
+  onFuncionarioChange(): void {
+    // Limpar horário selecionado quando funcionário mudar
+    this.agendamentoHora = '';
+  }
+
+  onServicoChange(): void {
+    // Limpar horário selecionado quando serviço mudar
+    this.agendamentoHora = '';
+  }
+
   private resetForm() {
     this.editandoAgendamento = false;
     this.agendamentoEditandoId = undefined;
-    this.agendamento = { dataHora: '', observacoes: '', cliente: null as any, funcionario: null as any, servico: null as any };
+    this.agendamento = { dataHora: '', observacoes: '', cliente: null as any, funcionario: null as any, servico: { nome: '', duracaoMinutos: 60 } };
+    this.agendamentoData = '';
+    this.agendamentoHora = '';
+    this.selectedDate = null;
     this.configurarClienteLogado();
     this.mostrarFormulario = false;
   }

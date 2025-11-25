@@ -26,7 +26,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('MASTER')")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
     public ResponseEntity<List<Cliente>> getAllCliente() {
         return ResponseEntity.ok(clienteService.findAll());
     }

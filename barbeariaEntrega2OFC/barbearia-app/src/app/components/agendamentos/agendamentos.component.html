@@ -9,12 +9,17 @@
   <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
     <h3>{{ editandoAgendamento ? 'Editar Agendamento' : 'Cadastrar Novo Agendamento' }}</h3>
     <form (ngSubmit)="cadastrarAgendamento()">
-      <div class="form-group">
+      <div class="form-group" *ngIf="isAdmin()">
         <label class="form-label" for="cliente">Cliente:</label>
         <select class="form-input" id="cliente" name="cliente" [(ngModel)]="agendamento.cliente" required>
           <option value="">Selecione um cliente</option>
           <option *ngFor="let cliente of clientes" [ngValue]="cliente">{{ cliente.nome }}</option>
         </select>
+      </div>
+      
+      <div class="form-group" *ngIf="isCliente()">
+        <label class="form-label">Agendando para:</label>
+        <div class="readonly-field">{{ agendamento.cliente?.nome }}</div>
       </div>
       
       <div class="form-group">

@@ -47,6 +47,26 @@
   margin-top: 1.5rem;
 }
 
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-footer p {
+  color: #a0aec0;
+  margin: 0;
+}
+
+.login-footer a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .login-page {
     padding: 1.5rem 1rem;

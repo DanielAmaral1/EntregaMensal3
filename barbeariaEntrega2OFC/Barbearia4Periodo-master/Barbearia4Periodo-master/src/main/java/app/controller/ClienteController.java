@@ -6,6 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,17 +19,20 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MASTER')")
     public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
         Cliente savedCliente = clienteService.save(cliente);
         return new ResponseEntity<>(savedCliente, HttpStatus.CREATED);
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('MASTER')")
     public ResponseEntity<List<Cliente>> getAllCliente() {
         return ResponseEntity.ok(clienteService.findAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER')")
     public ResponseEntity<Cliente> findById(@PathVariable Long id) {
         return clienteService.findById(id)
                 .map(ResponseEntity::ok)
@@ -36,6 +40,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER')")
     public ResponseEntity<Cliente> updateCliente(
             @PathVariable Long id,
             @RequestBody Cliente clienteDetails) {
@@ -43,6 +48,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MASTER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         clienteService.deleteById(id);
         return ResponseEntity.noContent().build();

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicoService } from '../../services/servico/servico.service';
 import { Servico } from '../../model/servicos/servico.model';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-servicos',
@@ -29,7 +30,14 @@ export class ServicosComponent implements OnInit {
     duracaoMinutos: ''
   };
 
-  constructor(private servicoService: ServicoService) {}
+  constructor(
+    private servicoService: ServicoService,
+    private authService: AuthService
+  ) {}
+  
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
   
   ngOnInit() {
     this.carregarServicos();

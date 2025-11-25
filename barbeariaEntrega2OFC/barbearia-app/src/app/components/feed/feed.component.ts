@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostFeedService } from '../../services/feed/post-feed.service';
 import { ClienteService } from '../../services/cliente/cliente.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { PostFeed, ComentarioFeed } from '../../model/feed/post-feed.model';
 import { Cliente } from '../../model/clientes/cliente.model';
 
@@ -25,8 +26,7 @@ export class FeedComponent implements OnInit {
   clientes: Cliente[] = [];
   termoPesquisa: string = '';
   
-  comentariosExpandidos: Set<number> = new Set();
-  novoComentario: { [key: number]: string } = {};
+
   
   erros = {
     conteudo: '',
@@ -35,40 +35,80 @@ export class FeedComponent implements OnInit {
 
   constructor(
     private postFeedService: PostFeedService,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private authService: AuthService
   ) {}
   
   ngOnInit() {
     this.carregarPosts();
     this.carregarClientes();
+    this.configurarAutorLogado();
+  }
+
+  configurarAutorLogado() {
+    if (this.authService.isCliente()) {
+      const clienteId = this.authService.getClienteId();
+      const nomeCliente = this.authService.getUsername();
+      if (clienteId && nomeCliente) {
+        this.post.autor = { id_cliente: clienteId, nome: nomeCliente };
+      }
+    } else if (this.authService.isAdmin()) {
+      // Buscar ou criar cliente Route 48
+      this.buscarClienteRoute48();
+    }
+  }
+
+  buscarClienteRoute48() {
+    this.clienteService.findAll().subscribe({
+      next: (clientes) => {
+        let route48 = clientes.find(c => c.nome === 'Route 48');
+        if (route48) {
+          this.post.autor = { id_cliente: route48.id_cliente || 0, nome: 'Route 48' };
+        } else {
+          // Se não existir, criar cliente Route 48
+          this.criarClienteRoute48();
+        }
+      },
+      error: () => {
+        this.post.autor = { id_cliente: 1, nome: 'Route 48' }; // Fallback
+      }
+    });
+  }
+
+  criarClienteRoute48() {
+    const clienteRoute48 = {
+      nome: 'Route 48',
+      celular: '(00) 00000-0000',
+      email: 'route48@barbearia.com',
+      password: 'admin123'
+    };
+    
+    this.clienteService.save(clienteRoute48).subscribe({
+      next: (cliente) => {
+        this.post.autor = { id_cliente: cliente.id_cliente || 0, nome: 'Route 48' };
+      },
+      error: () => {
+        this.post.autor = { id_cliente: 1, nome: 'Route 48' }; // Fallback
+      }
+    });
   }
 
   carregarPosts() {
     this.postFeedService.findAll().subscribe({
       next: (posts) => {
+        console.log('Posts carregados:', posts);
         this.posts = posts;
         this.postsFiltrados = posts;
-        posts.forEach(post => {
-          if (post.id_post) {
-            this.carregarComentarios(post.id_post);
-          }
-        });
       },
-      error: (error) => console.error('Erro ao carregar posts:', error)
+      error: (error) => {
+        console.error('Erro ao carregar posts:', error);
+        console.error('Status:', error.status);
+        console.error('Message:', error.message);
+      }
     });
   }
 
-  carregarComentarios(idPost: number) {
-    this.postFeedService.getComentarios(idPost).subscribe({
-      next: (comentarios) => {
-        const post = this.posts.find(p => p.id_post === idPost);
-        if (post) {
-          post.comentarios = comentarios;
-        }
-      },
-      error: (error) => console.error('Erro ao carregar comentários:', error)
-    });
-  }
+
 
   carregarClientes() {
     this.clienteService.findAll().subscribe({
@@ -113,12 +153,14 @@ export class FeedComponent implements OnInit {
         });
       } else {
         this.postFeedService.save(this.post).subscribe({
-          next: (novoPost) => {
+          next: (response) => {
+            console.log('Post salvo:', response);
             alert('Post publicado com sucesso!');
             this.resetForm();
-            // Adiciona o novo post no início da lista
-            this.posts.unshift(novoPost);
-            this.postsFiltrados = [...this.posts];
+            // Aguarda um pouco antes de recarregar
+            setTimeout(() => {
+              this.carregarPosts();
+            }, 500);
           },
           error: (error) => {
             console.error('Erro ao publicar post:', error);
@@ -151,89 +193,7 @@ export class FeedComponent implements OnInit {
     }
   }
 
-  curtirPost(post: PostFeed) {
-    if (post.id_post) {
-      this.postFeedService.curtirPost(post.id_post).subscribe({
-        next: (updatedPost) => {
-          post.curtidas = updatedPost.curtidas;
-        },
-        error: (error) => {
-          console.error('Erro ao curtir post:', error);
-          alert('Erro ao curtir post!');
-        }
-      });
-    }
-  }
 
-  descurtirPost(post: PostFeed) {
-    if (post.id_post && post.curtidas && post.curtidas > 0) {
-      this.postFeedService.descurtirPost(post.id_post).subscribe({
-        next: (updatedPost) => {
-          post.curtidas = updatedPost.curtidas;
-        },
-        error: (error) => {
-          console.error('Erro ao descurtir post:', error);
-          alert('Erro ao descurtir post!');
-        }
-      });
-    }
-  }
-
-  toggleComentarios(idPost: number) {
-    if (this.comentariosExpandidos.has(idPost)) {
-      this.comentariosExpandidos.delete(idPost);
-    } else {
-      this.comentariosExpandidos.add(idPost);
-      this.carregarComentarios(idPost);
-    }
-  }
-
-  adicionarComentario(post: PostFeed) {
-    if (!post.id_post || !this.novoComentario[post.id_post]?.trim()) {
-      alert('O comentário não pode estar vazio!');
-      return;
-    }
-
-    // Usa o primeiro cliente disponível como autor do comentário (protótipo)
-    // Em produção, deveria usar o cliente logado
-    if (this.clientes.length === 0) {
-      alert('Nenhum cliente disponível para comentar!');
-      return;
-    }
-
-    const comentario: ComentarioFeed = {
-      texto: this.novoComentario[post.id_post],
-      autor: { id_cliente: this.clientes[0].id_cliente || 0 }
-    };
-
-    this.postFeedService.adicionarComentario(post.id_post, comentario).subscribe({
-      next: () => {
-        this.novoComentario[post.id_post!] = '';
-        if (post.id_post) {
-          this.carregarComentarios(post.id_post);
-        }
-        alert('Comentário adicionado com sucesso!');
-      },
-      error: (error) => {
-        console.error('Erro ao adicionar comentário:', error);
-        alert('Erro ao adicionar comentário!');
-      }
-    });
-  }
-
-  removerComentario(idComentario: number, idPost: number) {
-    if (confirm('Tem certeza que deseja remover este comentário?')) {
-      this.postFeedService.removerComentario(idComentario).subscribe({
-        next: () => {
-          this.carregarComentarios(idPost);
-        },
-        error: (error) => {
-          console.error('Erro ao remover comentário:', error);
-          alert('Erro ao remover comentário!');
-        }
-      });
-    }
-  }
   
   cancelarEdicao() {
     this.resetForm();
@@ -243,6 +203,7 @@ export class FeedComponent implements OnInit {
     this.editandoPost = false;
     this.postEditandoId = undefined;
     this.post = { conteudo: '', autor: { id_cliente: 0, nome: '' } };
+    this.configurarAutorLogado();
     this.limparErros();
     this.mostrarFormulario = false;
   }
@@ -270,10 +231,6 @@ export class FeedComponent implements OnInit {
   }
 
   private validarAutor(): boolean {
-    if (!this.post.autor || !this.post.autor.id_cliente) {
-      this.erros.autor = 'Selecione um autor!';
-      return false;
-    }
     return true;
   }
 }

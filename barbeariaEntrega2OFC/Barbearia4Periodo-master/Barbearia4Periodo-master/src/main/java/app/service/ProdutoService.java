@@ -55,7 +55,7 @@ public class ProdutoService {
             throw new RuntimeException("Não é possível excluir produto inexistente");
         }
         if (produto.get().getQuantidadeEstoque() > 0) {
-            throw new RuntimeException("Não é possível excluir produto com estoque disponível");
+            throw new RuntimeException("Não é possível excluir produto com estoque disponível. Quantidade atual: " + produto.get().getQuantidadeEstoque() + " unidades. Zere o estoque antes de deletar.");
         }
         produtoRepository.deleteById(id);
     }

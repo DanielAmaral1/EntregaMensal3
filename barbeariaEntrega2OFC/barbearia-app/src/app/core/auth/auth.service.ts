@@ -9,6 +9,7 @@ interface LoginResponse {
   token: string;
   expiresIn: number;
   expiresAt: string;
+  clienteId?: number;
 }
 
 @Injectable({
@@ -23,6 +24,8 @@ export class AuthService {
   private readonly expiresKey = 'barbearia.token.exp';
   private readonly rolesKey = 'barbearia.roles';
   private readonly usernameKey = 'barbearia.username';
+  private readonly userTypeKey = 'barbearia.userType';
+  private readonly clienteIdKey = 'barbearia.clienteId';
 
   private readonly authenticated = signal(this.hasValidToken());
   readonly authenticatedState: Signal<boolean> = computed(() => this.authenticated());
@@ -56,6 +59,25 @@ export class AuthService {
     return localStorage.getItem(this.usernameKey);
   }
 
+  getUserType(): string | null {
+    return localStorage.getItem(this.userTypeKey);
+  }
+
+  getClienteId(): number | null {
+    const id = localStorage.getItem(this.clienteIdKey);
+    return id ? Number(id) : null;
+  }
+
+  isAdmin(): boolean {
+    const roles = this.getRoles();
+    return roles.includes('MASTER');
+  }
+
+  isCliente(): boolean {
+    const roles = this.getRoles();
+    return roles.includes('CLIENTE');
+  }
+
   isSessionValid(): boolean {
     const valid = this.hasValidToken();
 
@@ -82,6 +104,10 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, response.token);
     localStorage.setItem(this.rolesKey, JSON.stringify(response.roles ?? []));
     localStorage.setItem(this.usernameKey, response.username ?? '');
+    
+    if (response.clienteId) {
+      localStorage.setItem(this.clienteIdKey, response.clienteId.toString());
+    }
 
     const expiresAtFromToken = this.getTokenExpiration(response.token);
     const expiresAt = expiresAtFromToken ?? this.parseIsoDate(response.expiresAt);
@@ -138,6 +164,8 @@ export class AuthService {
     localStorage.removeItem(this.expiresKey);
     localStorage.removeItem(this.rolesKey);
     localStorage.removeItem(this.usernameKey);
+    localStorage.removeItem(this.userTypeKey);
+    localStorage.removeItem(this.clienteIdKey);
   }
 }
 

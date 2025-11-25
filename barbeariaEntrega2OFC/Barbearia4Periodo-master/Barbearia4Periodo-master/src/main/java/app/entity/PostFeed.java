@@ -32,10 +32,12 @@ public class PostFeed {
     private Integer curtidas = 0;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
-    @NotNull(message = "O autor é obrigatório")
+    @JoinColumn(name = "id_cliente", nullable = true)
     @JsonIgnoreProperties({"posts", "avaliacoes", "agendamentos"})
     private Cliente autor;
+    
+    @Column(name = "autor_nome")
+    private String autorNome; // Para casos onde não há cliente (ex: Master)
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("post")

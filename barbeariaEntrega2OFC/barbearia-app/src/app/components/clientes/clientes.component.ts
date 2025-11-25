@@ -16,8 +16,7 @@ export class ClientesComponent implements OnInit {
   cliente: Cliente = {
     nome: '',
     celular: '',
-    email: '',
-    idade: 0
+    email: ''
   };
   
   clientes: Cliente[] = [];
@@ -27,8 +26,7 @@ export class ClientesComponent implements OnInit {
   erros = {
     nome: '',
     celular: '',
-    email: '',
-    idade: ''
+    email: ''
   };
 
   constructor(private clienteService: ClienteService) {}
@@ -57,8 +55,7 @@ export class ClientesComponent implements OnInit {
     this.clientesFiltrados = this.clientes.filter(cliente => 
       cliente.nome.toLowerCase().includes(termo) ||
       cliente.email.toLowerCase().includes(termo) ||
-      cliente.celular.includes(termo) ||
-      cliente.idade.toString().includes(termo)
+      cliente.celular.includes(termo)
     );
   }
 
@@ -126,7 +123,7 @@ export class ClientesComponent implements OnInit {
   private resetForm() {
     this.editandoCliente = false;
     this.clienteEditandoId = undefined;
-    this.cliente = { nome: '', celular: '', email: '', idade: 0 };
+    this.cliente = { nome: '', celular: '', email: '' };
     this.limparErros();
     this.mostrarFormulario = false;
   }
@@ -138,13 +135,12 @@ export class ClientesComponent implements OnInit {
     if (!this.validarNome()) valido = false;
     if (!this.validarCelular()) valido = false;
     if (!this.validarEmail()) valido = false;
-    if (!this.validarIdade()) valido = false;
     
     return valido;
   }
 
   private limparErros(): void {
-    this.erros = { nome: '', celular: '', email: '', idade: '' };
+    this.erros = { nome: '', celular: '', email: '' };
   }
 
   private validarNome(): boolean {
@@ -173,13 +169,7 @@ export class ClientesComponent implements OnInit {
     return true;
   }
 
-  private validarIdade(): boolean {
-    if (!this.cliente.idade || this.cliente.idade < 1 || this.cliente.idade > 120) {
-      this.erros.idade = 'A idade deve ser entre 1 e 120 anos!';
-      return false;
-    }
-    return true;
-  }
+
 
   formatarCelular(event: any): void {
     let valor = event.target.value.replace(/\D/g, '');

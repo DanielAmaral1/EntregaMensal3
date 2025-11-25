@@ -2,12 +2,11 @@ export interface PostFeed {
   id_post?: number;
   conteudo: string;
   dataPost?: string;
-  curtidas?: number;
   autor?: {
     id_cliente: number;
     nome?: string;
   };
-  comentarios?: ComentarioFeed[];
+  autorNome?: string; // Para casos onde não há cliente (ex: Master)
 }
 
 export interface ComentarioFeed {

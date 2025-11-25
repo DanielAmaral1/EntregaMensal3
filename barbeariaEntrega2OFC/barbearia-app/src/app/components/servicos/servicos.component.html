@@ -1,12 +1,12 @@
 <div class="container">
   <div class="page-header">
     <h2>✂️ Serviços</h2>
-    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+    <button *ngIf="isAdmin()" class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
       {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Serviço' }}
     </button>
   </div>
 
-  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+  <div *ngIf="mostrarFormulario && isAdmin()" class="card form-card fade-in-up">
     <h3>{{ editandoServico ? 'Editar Serviço' : 'Cadastrar Novo Serviço' }}</h3>
     <form (ngSubmit)="cadastrarServico()">
       <div class="form-group">
@@ -49,11 +49,11 @@
       <div class="servico-icon">✂️</div>
       <h4>{{ s.nome }}</h4>
       <div class="servico-info">
-        <p>📝 {{ s.descricao }}</p>
-        <p>💰 R$ {{ s.preco }}</p>
+        <p>{{ s.descricao }}</p>
+        <p>R$ {{ s.preco }}</p>
         <p>⏱️ {{ s.duracaoMinutos }} minutos</p>
       </div>
-      <div class="servico-actions">
+      <div *ngIf="isAdmin()" class="servico-actions">
         <button class="btn btn-edit" (click)="editarServico(s)">✏️ Editar</button>
         <button class="btn btn-delete" (click)="deletarServico(s)">🗑️ Deletar</button>
       </div>

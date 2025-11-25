@@ -48,9 +48,9 @@
       <div class="produto-icon">🛍️</div>
       <h4>{{ p.nome }}</h4>
       <div class="produto-info">
-        <p>📝 {{ p.descricao }}</p>
-        <p>💰 R$ {{ p.preco }}</p>
-        <p>📦 {{ p.quantidadeEstoque }} unidades</p>
+        <p>{{ p.descricao }}</p>
+        <p>R$ {{ p.preco }}</p>
+        <p>{{ p.quantidadeEstoque }} unidades</p>
       </div>
       <div class="produto-actions">
         <button class="btn btn-edit" (click)="editarProduto(p)">✏️ Editar</button>

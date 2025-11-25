@@ -15,16 +15,14 @@ export class FuncionariosComponent implements OnInit {
   
   funcionario: Funcionario = {
     nome: '',
-    telefone: '',
-    endereco: ''
+    telefone: ''
   };
   
   funcionarios: Funcionario[] = [];
   
   erros = {
     nome: '',
-    telefone: '',
-    endereco: ''
+    telefone: ''
   };
 
   constructor(private funcionarioService: FuncionarioService) {}
@@ -95,7 +93,8 @@ export class FuncionariosComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erro ao deletar funcionário:', error);
-          alert('Erro ao deletar funcionário!');
+          const mensagem = error.error?.message || error.message || 'Erro desconhecido ao deletar funcionário';
+          alert(mensagem);
         }
       });
     }
@@ -108,7 +107,7 @@ export class FuncionariosComponent implements OnInit {
   private resetForm() {
     this.editandoFuncionario = false;
     this.funcionarioEditandoId = undefined;
-    this.funcionario = { nome: '', telefone: '', endereco: '' };
+    this.funcionario = { nome: '', telefone: '' };
     this.limparErros();
     this.mostrarFormulario = false;
   }
@@ -119,13 +118,12 @@ export class FuncionariosComponent implements OnInit {
     
     if (!this.validarNome()) valido = false;
     if (!this.validarTelefone()) valido = false;
-    if (!this.validarEndereco()) valido = false;
     
     return valido;
   }
 
   private limparErros(): void {
-    this.erros = { nome: '', telefone: '', endereco: '' };
+    this.erros = { nome: '', telefone: '' };
   }
 
   private validarNome(): boolean {
@@ -145,13 +143,7 @@ export class FuncionariosComponent implements OnInit {
     return true;
   }
 
-  private validarEndereco(): boolean {
-    if (!this.funcionario.endereco || this.funcionario.endereco.trim().length === 0) {
-      this.erros.endereco = 'O endereço não pode ser nulo!';
-      return false;
-    }
-    return true;
-  }
+
 
   formatarTelefone(event: any): void {
     let valor = event.target.value.replace(/\D/g, '');

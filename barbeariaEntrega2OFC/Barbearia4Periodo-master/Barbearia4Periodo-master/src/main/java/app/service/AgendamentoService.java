@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import app.entity.Cliente;
 import app.entity.Agendamento;
 import app.repository.AgendamentoRepository;
+import app.repository.AvaliacaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,10 +16,12 @@ import java.util.List;
 public class AgendamentoService {
 
     private final AgendamentoRepository agendamentoRepository;
+    private final AvaliacaoRepository avaliacaoRepository;
 
     @Autowired
-    public AgendamentoService(AgendamentoRepository agendamentoRepository) {
+    public AgendamentoService(AgendamentoRepository agendamentoRepository, AvaliacaoRepository avaliacaoRepository) {
         this.agendamentoRepository = agendamentoRepository;
+        this.avaliacaoRepository = avaliacaoRepository;
     }
 
     // Create
@@ -50,10 +54,16 @@ public class AgendamentoService {
 
 
     // Delete
+    @Transactional
     public void deleteById(Long id) {
         if (!agendamentoRepository.existsById(id)) {
             throw new EntityNotFoundException("Agendamento not found with id: " + id);
         }
+        
+        // Deletar avaliações vinculadas primeiro
+        avaliacaoRepository.deleteByAgendamentoId(id);
+        
+        // Depois deletar o agendamento
         agendamentoRepository.deleteById(id);
     }
     public List<Agendamento> buscarPorCliente(Cliente cliente) {

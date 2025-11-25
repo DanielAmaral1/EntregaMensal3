@@ -2,8 +2,10 @@ package app.service;
 
 import app.entity.Funcionario;
 import app.repository.FuncionarioRepository;
+import app.repository.AgendamentoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +14,12 @@ import java.util.List;
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     @Autowired
-    public FuncionarioService(FuncionarioRepository funcionarioRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, AgendamentoRepository agendamentoRepository) {
         this.funcionarioRepository = funcionarioRepository;
+        this.agendamentoRepository = agendamentoRepository;
     }
 
     public Funcionario save(Funcionario funcionario) {
@@ -43,6 +47,13 @@ public class FuncionarioService {
         if (!funcionarioRepository.existsById(id)) {
             throw new EntityNotFoundException("Funcionario not found with id: " + id);
         }
+        
+        // Verificar se há agendamentos vinculados
+        long agendamentosCount = agendamentoRepository.countByFuncionarioId(id);
+        if (agendamentosCount > 0) {
+            throw new DataIntegrityViolationException("Não é possível excluir o funcionário pois existem " + agendamentosCount + " agendamento(s) vinculado(s) a ele.");
+        }
+        
         funcionarioRepository.deleteById(id);
     }
 

@@ -23,11 +23,17 @@
   margin: 0 auto;
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.features-container {
+  display: flex;
   gap: 2rem;
   margin-top: 3rem;
+}
+
+.features-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .feature-card {
@@ -68,7 +74,7 @@
     font-size: 2rem;
   }
   
-  .features-grid {
-    grid-template-columns: 1fr;
+  .features-container {
+    flex-direction: column;
   }
 }

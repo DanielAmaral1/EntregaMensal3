@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 
 
 
@@ -21,17 +22,18 @@ public class Cliente {
     private String nome;
     private String celular;
     private String email;
-    private Integer idade;
+    
+    @Column(nullable = true)
+    private String password; // Senha criptografada para login
 
 
 
     public Cliente() {}
 
-    public Cliente(String nome, String celular, String email, Integer idade) {
+    public Cliente(String nome, String celular, String email) {
         this.nome = nome;
         this.celular = celular;
         this.email = email;
-        this.idade = idade;
     }
 
     @Override

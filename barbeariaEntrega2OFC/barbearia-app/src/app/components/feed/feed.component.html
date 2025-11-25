@@ -21,13 +21,8 @@
     <h3>{{ editandoPost ? 'Editar Post' : 'Novo Post' }}</h3>
     <form (ngSubmit)="cadastrarPost()">
       <div class="form-group">
-        <label class="form-label" for="autor">Autor:</label>
-        <select class="form-input" id="autor" name="autor" 
-                [(ngModel)]="post.autor.id_cliente" required>
-          <option value="">Selecione um autor</option>
-          <option *ngFor="let c of clientes" [value]="c.id_cliente">{{ c.nome }}</option>
-        </select>
-        <div *ngIf="erros.autor" class="error-message">{{ erros.autor }}</div>
+        <label class="form-label">Postando como:</label>
+        <div class="readonly-field">{{ post.autor?.nome }}</div>
       </div>
       
       <div class="form-group">
@@ -53,7 +48,7 @@
         <div class="post-author">
           <span class="avatar">👤</span>
           <div class="author-info">
-            <span class="author-name">{{ p.autor?.nome || 'Anônimo' }}</span>
+            <span class="author-name">{{ p.autor?.nome || p.autorNome || 'Anônimo' }}</span>
             <span class="post-date">{{ p.dataPost | date:'dd/MM/yyyy HH:mm' }}</span>
           </div>
         </div>
@@ -67,44 +62,7 @@
         <p>{{ p.conteudo }}</p>
       </div>
       
-      <div class="post-interactions">
-        <div class="interaction-buttons">
-          <button class="btn-interaction" (click)="curtirPost(p)">
-            ❤️ Curtir ({{ p.curtidas || 0 }})
-          </button>
-          <button class="btn-interaction" (click)="toggleComentarios(p.id_post!)">
-            💬 Comentários ({{ p.comentarios?.length || 0 }})
-          </button>
-        </div>
-      </div>
 
-      <div *ngIf="comentariosExpandidos.has(p.id_post!)" class="comentarios-section">
-        <div class="comentarios-list">
-          <div *ngFor="let comentario of p.comentarios" class="comentario-item">
-            <div class="comentario-header">
-              <span class="comentario-author">{{ comentario.autor?.nome || 'Anônimo' }}</span>
-              <span class="comentario-date">{{ comentario.dataComentario | date:'dd/MM/yyyy HH:mm' }}</span>
-            </div>
-            <p class="comentario-texto">{{ comentario.texto }}</p>
-            <button class="btn-delete-small" 
-                    *ngIf="comentario.id_comentario"
-                    (click)="removerComentario(comentario.id_comentario, p.id_post!)">
-              🗑️
-            </button>
-          </div>
-        </div>
-        
-        <div class="novo-comentario-form">
-          <textarea 
-            class="form-input" 
-            placeholder="Escreva um comentário..." 
-            rows="2"
-            [(ngModel)]="novoComentario[p.id_post!]"></textarea>
-          <button class="btn btn-primary" (click)="adicionarComentario(p)">
-            📤 Comentar
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 

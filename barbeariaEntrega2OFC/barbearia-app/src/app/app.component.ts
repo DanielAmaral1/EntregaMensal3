@@ -18,6 +18,14 @@ export class AppComponent {
     return this.authService.getUsername();
   }
 
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
+  isCliente(): boolean {
+    return this.authService.isCliente();
+  }
+
   logout(): void {
     this.authService.logout();
   }

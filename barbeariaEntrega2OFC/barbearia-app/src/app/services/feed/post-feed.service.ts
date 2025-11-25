@@ -32,25 +32,7 @@ export class PostFeedService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  curtirPost(idPost: number): Observable<PostFeed> {
-    return this.http.post<PostFeed>(`${this.apiUrl}/${idPost}/curtir`, {});
-  }
 
-  descurtirPost(idPost: number): Observable<PostFeed> {
-    return this.http.post<PostFeed>(`${this.apiUrl}/${idPost}/descurtir`, {});
-  }
-
-  adicionarComentario(idPost: number, comentario: ComentarioFeed): Observable<ComentarioFeed> {
-    return this.http.post<ComentarioFeed>(`${this.apiUrl}/${idPost}/comentarios`, comentario);
-  }
-
-  getComentarios(idPost: number): Observable<ComentarioFeed[]> {
-    return this.http.get<ComentarioFeed[]>(`${this.apiUrl}/${idPost}/comentarios`);
-  }
-
-  removerComentario(idComentario: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/comentarios/${idComentario}`);
-  }
 
   findByAutor(idCliente: number): Observable<PostFeed[]> {
     return this.http.get<PostFeed[]>(`${this.apiUrl}/autor/${idCliente}`);
@@ -60,8 +42,6 @@ export class PostFeedService {
     return this.http.get<PostFeed[]>(`${this.apiUrl}/pesquisar?termo=${termo}`);
   }
 
-  findByCurtidasMinimas(curtidas: number): Observable<PostFeed[]> {
-    return this.http.get<PostFeed[]>(`${this.apiUrl}/curtidas-minimas/${curtidas}`);
-  }
+
 }
 

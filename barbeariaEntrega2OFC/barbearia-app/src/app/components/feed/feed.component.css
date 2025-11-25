@@ -184,6 +184,15 @@
   margin-top: 0.25rem;
 }
 
+.readonly-field {
+  padding: 0.75rem;
+  background: #1a202c;
+  border: 1px solid #4a5568;
+  border-radius: 0.375rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .post-header {
     flex-direction: column;

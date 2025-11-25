@@ -87,7 +87,8 @@ export class ProdutosComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erro ao deletar produto:', error);
-          alert('Erro ao deletar produto!');
+          const mensagem = error.error?.message || error.message || 'Erro desconhecido ao deletar produto';
+          alert(mensagem);
         }
       });
     }

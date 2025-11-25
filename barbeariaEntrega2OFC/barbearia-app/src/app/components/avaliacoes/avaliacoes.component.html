@@ -1,7 +1,7 @@
 <div class="container">
   <div class="page-header">
     <h2>⭐ Avaliações de Satisfação</h2>
-    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+    <button *ngIf="isCliente()" class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
       {{ mostrarFormulario ? '❌ Cancelar' : '➕ Nova Avaliação' }}
     </button>
   </div>
@@ -25,10 +25,10 @@
     </div>
   </div>
 
-  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+  <div *ngIf="mostrarFormulario && isCliente()" class="card form-card fade-in-up">
     <h3>{{ editandoAvaliacao ? 'Editar Avaliação' : 'Nova Avaliação' }}</h3>
     <form (ngSubmit)="cadastrarAvaliacao()">
-      <div class="form-group">
+      <div class="form-group" *ngIf="isAdmin()">
         <label class="form-label" for="cliente">Cliente:</label>
         <select class="form-input" id="cliente" name="cliente" 
                 [(ngModel)]="avaliacao.cliente.id_cliente" required>
@@ -36,6 +36,11 @@
           <option *ngFor="let c of clientes" [value]="c.id_cliente">{{ c.nome }}</option>
         </select>
         <div *ngIf="erros.cliente" class="error-message">{{ erros.cliente }}</div>
+      </div>
+      
+      <div class="form-group" *ngIf="isCliente()">
+        <label class="form-label">Avaliando como:</label>
+        <div class="readonly-field">{{ avaliacao.cliente?.nome }}</div>
       </div>
 
       <div class="form-group">
@@ -95,8 +100,7 @@
         <span class="meta-item">🕐 {{ a.dataAvaliacao | date:'dd/MM/yyyy HH:mm' }}</span>
       </div>
       
-      <div class="avaliacao-actions">
-        <button class="btn-edit" (click)="editarAvaliacao(a)">✏️ Editar</button>
+      <div *ngIf="isAdmin()" class="avaliacao-actions">
         <button class="btn-delete" (click)="deletarAvaliacao(a)">🗑️ Deletar</button>
       </div>
     </div>

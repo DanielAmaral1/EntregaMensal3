@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AvaliacaoService } from '../../services/avaliacao/avaliacao.service';
 import { ClienteService } from '../../services/cliente/cliente.service';
 import { AgendamentoService } from '../../services/agendamento/agendamento.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { Avaliacao } from '../../model/avaliacoes/avaliacao.model';
 import { Cliente } from '../../model/clientes/cliente.model';
 import { Agendamento } from '../../model/agendamentos/agendamento.model';
@@ -40,14 +41,34 @@ export class AvaliacoesComponent implements OnInit {
   constructor(
     private avaliacaoService: AvaliacaoService,
     private clienteService: ClienteService,
-    private agendamentoService: AgendamentoService
+    private agendamentoService: AgendamentoService,
+    private authService: AuthService
   ) {}
+  
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+  
+  isCliente(): boolean {
+    return this.authService.isCliente();
+  }
   
   ngOnInit() {
     this.carregarAvaliacoes();
     this.carregarClientes();
     this.carregarAgendamentos();
     this.carregarMediaNotas();
+    this.configurarClienteLogado();
+  }
+
+  configurarClienteLogado() {
+    if (this.isCliente()) {
+      const clienteId = this.authService.getClienteId();
+      const nomeCliente = this.authService.getUsername();
+      if (clienteId && nomeCliente) {
+        this.avaliacao.cliente = { id_cliente: clienteId, nome: nomeCliente };
+      }
+    }
   }
 
   carregarAvaliacoes() {
@@ -70,12 +91,26 @@ export class AvaliacoesComponent implements OnInit {
   }
 
   carregarAgendamentos() {
-    this.agendamentoService.getAll().subscribe({
-      next: (agendamentos) => {
-        this.agendamentos = agendamentos;
-      },
-      error: (error) => console.error('Erro ao carregar agendamentos:', error)
-    });
+    if (this.isCliente()) {
+      const clienteId = this.authService.getClienteId();
+      if (clienteId) {
+        // Carregar apenas agendamentos do cliente logado
+        this.agendamentoService.getAll().subscribe({
+          next: (agendamentos) => {
+            this.agendamentos = agendamentos.filter(a => a.cliente?.id_cliente === clienteId);
+          },
+          error: (error) => console.error('Erro ao carregar agendamentos:', error)
+        });
+      }
+    } else {
+      // Admin vê todos os agendamentos
+      this.agendamentoService.getAll().subscribe({
+        next: (agendamentos) => {
+          this.agendamentos = agendamentos;
+        },
+        error: (error) => console.error('Erro ao carregar agendamentos:', error)
+      });
+    }
   }
 
   carregarMediaNotas() {
@@ -169,6 +204,7 @@ export class AvaliacoesComponent implements OnInit {
     this.editandoAvaliacao = false;
     this.avaliacaoEditandoId = undefined;
     this.avaliacao = { nota: 5, comentario: '', cliente: { id_cliente: 0, nome: '' }, agendamento: { id_agendamento: 0 } };
+    this.configurarClienteLogado();
     this.limparErros();
     this.mostrarFormulario = false;
   }
@@ -196,9 +232,11 @@ export class AvaliacoesComponent implements OnInit {
   }
 
   private validarCliente(): boolean {
-    if (!this.avaliacao.cliente || !this.avaliacao.cliente.id_cliente) {
-      this.erros.cliente = 'Selecione um cliente!';
-      return false;
+    if (this.isAdmin()) {
+      if (!this.avaliacao.cliente || !this.avaliacao.cliente.id_cliente) {
+        this.erros.cliente = 'Selecione um cliente!';
+        return false;
+      }
     }
     return true;
   }

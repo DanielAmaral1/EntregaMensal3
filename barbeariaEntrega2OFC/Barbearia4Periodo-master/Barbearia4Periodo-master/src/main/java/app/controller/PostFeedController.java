@@ -50,34 +50,7 @@ public class PostFeedController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{idPost}/curtir")
-    public ResponseEntity<PostFeed> curtirPost(@PathVariable Long idPost) {
-        return ResponseEntity.ok(postFeedService.curtirPost(idPost));
-    }
 
-    @PostMapping("/{idPost}/descurtir")
-    public ResponseEntity<PostFeed> descurtirPost(@PathVariable Long idPost) {
-        return ResponseEntity.ok(postFeedService.descurtirPost(idPost));
-    }
-
-    @PostMapping("/{idPost}/comentarios")
-    public ResponseEntity<ComentarioFeed> adicionarComentario(
-            @PathVariable Long idPost,
-            @RequestBody ComentarioFeed comentario) {
-        ComentarioFeed savedComentario = postFeedService.adicionarComentario(idPost, comentario);
-        return new ResponseEntity<>(savedComentario, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{idPost}/comentarios")
-    public ResponseEntity<List<ComentarioFeed>> getComentarios(@PathVariable Long idPost) {
-        return ResponseEntity.ok(postFeedService.getComentariosByPost(idPost));
-    }
-
-    @DeleteMapping("/comentarios/{idComentario}")
-    public ResponseEntity<Void> removerComentario(@PathVariable Long idComentario) {
-        postFeedService.removerComentario(idComentario);
-        return ResponseEntity.noContent().build();
-    }
 
     @GetMapping("/autor/{idCliente}")
     public ResponseEntity<List<PostFeed>> findByAutor(@PathVariable Long idCliente) {
@@ -89,9 +62,6 @@ public class PostFeedController {
         return ResponseEntity.ok(postFeedService.pesquisarPorConteudo(termo));
     }
 
-    @GetMapping("/curtidas-minimas/{curtidas}")
-    public ResponseEntity<List<PostFeed>> findByCurtidasMinimas(@PathVariable Integer curtidas) {
-        return ResponseEntity.ok(postFeedService.findByCurtidasMinimas(curtidas));
-    }
+
 }
 

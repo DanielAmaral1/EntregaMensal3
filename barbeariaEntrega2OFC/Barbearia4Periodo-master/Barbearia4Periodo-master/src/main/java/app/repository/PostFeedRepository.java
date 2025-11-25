@@ -11,14 +11,14 @@ import java.util.List;
 @Repository
 public interface PostFeedRepository extends JpaRepository<PostFeed, Long> {
     
-    @Query("SELECT p FROM PostFeed p WHERE p.autor.id_cliente = :idCliente")
+    @Query("SELECT p FROM PostFeed p WHERE (p.autor IS NOT NULL AND p.autor.id_cliente = :idCliente) OR (p.autor IS NULL AND :idCliente = 0)")
     List<PostFeed> findByAutorId(@Param("idCliente") Long idCliente);
     
-    List<PostFeed> findByOrderByDataPostDesc();
+
     
     List<PostFeed> findByConteudoContainingIgnoreCase(String termo);
     
-    List<PostFeed> findByCurtidasGreaterThanEqual(Integer curtidas);
+
     
 
 }

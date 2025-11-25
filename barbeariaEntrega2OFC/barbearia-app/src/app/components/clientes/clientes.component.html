@@ -10,7 +10,7 @@
     <div class="search-box">
       <input type="text" 
              class="search-input" 
-             placeholder="🔍 Pesquisar por nome, email, telefone ou idade..." 
+             placeholder="🔍 Pesquisar por nome, email ou telefone..." 
              [(ngModel)]="termoPesquisa" 
              (input)="pesquisar()">
       <button *ngIf="termoPesquisa" class="btn-clear" (click)="limparPesquisa()">❌</button>
@@ -41,12 +41,7 @@
         <div *ngIf="erros.email" class="error-message">{{ erros.email }}</div>
       </div>
       
-      <div class="form-group">
-        <label class="form-label" for="idade">Idade:</label>
-        <input class="form-input" type="number" id="idade" name="idade" [(ngModel)]="cliente.idade" 
-               placeholder="Entre 1 e 120" min="1" max="120" required>
-        <div *ngIf="erros.idade" class="error-message">{{ erros.idade }}</div>
-      </div>
+
       
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{{ editandoCliente ? '✏️ Atualizar' : '💾 Salvar' }} Cliente</button>
@@ -62,7 +57,7 @@
       <div class="cliente-info">
         <p>📱 {{ c.celular }}</p>
         <p>✉️ {{ c.email }}</p>
-        <p>🎂 {{ c.idade }} anos</p>
+
       </div>
       <div class="cliente-actions">
         <button class="btn btn-edit" (click)="editarCliente(c)">✏️ Editar</button>

@@ -31,17 +31,30 @@ public class PostFeedService {
     }
 
     public PostFeed save(PostFeed post) {
-        if (post.getAutor() != null && post.getAutor().getId_cliente() != null && post.getAutor().getId_cliente() > 0) {
-            post.setAutor(clienteRepository.findById(post.getAutor().getId_cliente())
-                    .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado")));
+        if (post.getAutor() != null && post.getAutor().getId_cliente() != null) {
+            if (post.getAutor().getId_cliente() > 0) {
+                post.setAutor(clienteRepository.findById(post.getAutor().getId_cliente())
+                        .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado")));
+            } else {
+                // Para Master (id_cliente = 0), usar autorNome e autor = null
+                post.setAutorNome("Route 48");
+                post.setAutor(null);
+            }
         } else {
-            throw new IllegalArgumentException("Autor é obrigatório e deve ser válido");
+            throw new IllegalArgumentException("Autor é obrigatório");
         }
         return postFeedRepository.save(post);
     }
 
     public List<PostFeed> findAll() {
-        return postFeedRepository.findByOrderByDataPostDesc();
+        List<PostFeed> posts = postFeedRepository.findAll();
+        posts.sort((a, b) -> {
+            if (a.getDataPost() == null && b.getDataPost() == null) return 0;
+            if (a.getDataPost() == null) return 1;
+            if (b.getDataPost() == null) return -1;
+            return b.getDataPost().compareTo(a.getDataPost());
+        });
+        return posts;
     }
 
     public Optional<PostFeed> findById(Long id) {
@@ -60,46 +73,7 @@ public class PostFeedService {
         postFeedRepository.deleteById(id);
     }
 
-    @Transactional
-    public PostFeed curtirPost(Long idPost) {
-        PostFeed post = findById(idPost)
-                .orElseThrow(() -> new EntityNotFoundException("Post não encontrado com id: " + idPost));
-        post.setCurtidas(post.getCurtidas() + 1);
-        return postFeedRepository.save(post);
-    }
 
-    @Transactional
-    public PostFeed descurtirPost(Long idPost) {
-        PostFeed post = findById(idPost)
-                .orElseThrow(() -> new EntityNotFoundException("Post não encontrado com id: " + idPost));
-        if (post.getCurtidas() > 0) {
-            post.setCurtidas(post.getCurtidas() - 1);
-        }
-        return postFeedRepository.save(post);
-    }
-
-    public ComentarioFeed adicionarComentario(Long idPost, ComentarioFeed comentario) {
-        PostFeed post = findById(idPost)
-                .orElseThrow(() -> new EntityNotFoundException("Post não encontrado com id: " + idPost));
-
-        if (comentario.getAutor() != null && comentario.getAutor().getId_cliente() != null && comentario.getAutor().getId_cliente() > 0) {
-            comentario.setAutor(clienteRepository.findById(comentario.getAutor().getId_cliente())
-                    .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado")));
-        } else {
-            throw new IllegalArgumentException("Autor do comentário é obrigatório e deve ser válido");
-        }
-
-        comentario.setPost(post);
-        return comentarioFeedRepository.save(comentario);
-    }
-
-    public void removerComentario(Long idComentario) {
-        comentarioFeedRepository.deleteById(idComentario);
-    }
-
-    public List<ComentarioFeed> getComentariosByPost(Long idPost) {
-        return comentarioFeedRepository.findByPostId(idPost);
-    }
 
     public List<PostFeed> findByAutor(Long idCliente) {
         return postFeedRepository.findByAutorId(idCliente);
@@ -109,8 +83,6 @@ public class PostFeedService {
         return postFeedRepository.findByConteudoContainingIgnoreCase(termo);
     }
 
-    public List<PostFeed> findByCurtidasMinimas(Integer curtidas) {
-        return postFeedRepository.findByCurtidasGreaterThanEqual(curtidas);
-    }
+
 }
 

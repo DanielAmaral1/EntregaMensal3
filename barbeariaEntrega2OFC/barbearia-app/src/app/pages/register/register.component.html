@@ -1,0 +1,107 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>✂️ Criar Conta</h2>
+      <p>Cadastre-se para agendar seus serviços</p>
+    </div>
+
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" class="login-form">
+      <div class="form-group">
+        <label for="nome">Nome Completo:</label>
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          [(ngModel)]="nome"
+          required
+          minlength="3"
+          class="form-input"
+          placeholder="Digite seu nome completo"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="celular">Celular:</label>
+        <input
+          type="tel"
+          id="celular"
+          name="celular"
+          [(ngModel)]="celular"
+          required
+          class="form-input"
+          placeholder="(11) 99999-9999"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          class="form-input"
+          placeholder="seu@email.com"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <div class="password-input-container">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            minlength="4"
+            class="form-input"
+            placeholder="Digite sua senha"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+          >
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Senha:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          class="form-input"
+          placeholder="Digite a senha novamente"
+        />
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="success-message">
+        {{ successMessage }}
+      </div>
+
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="registerForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Criando conta...' : '✅ Criar Conta' }}
+      </button>
+
+      <div class="login-footer">
+        <p>Já tem uma conta? <a routerLink="/login">Fazer login</a></p>
+      </div>
+    </form>
+  </div>
+</div>

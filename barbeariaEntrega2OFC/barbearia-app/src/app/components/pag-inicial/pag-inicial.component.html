@@ -1,40 +1,87 @@
 <div class="hero-section">
   <div class="container">
     <div class="hero-content fade-in-up">
-      <h1 class="hero-title">🎆 Bem-vindo à BarberShop</h1>
       <p class="hero-subtitle">Onde estilo encontra tradição. Gerencie sua barbearia com excelência.</p>
     </div>
     
-    <div class="features-grid">
-      <a routerLink="/clientes" class="feature-card fade-in-up">
-        <div class="feature-icon">👥</div>
-        <h3>Clientes</h3>
-        <p>Gerencie sua base de clientes</p>
-      </a>
+    <div class="features-container">
+      <!-- Opções para Admin -->
+      <ng-container *ngIf="isAdmin()">
+        <div class="features-row">
+          <a routerLink="/clientes" class="feature-card fade-in-up">
+            <div class="feature-icon">👥</div>
+            <h3>Clientes</h3>
+            <p>Gerencie sua base de clientes</p>
+          </a>
+          
+          <a routerLink="/agendamentos" class="feature-card fade-in-up">
+            <div class="feature-icon">📅</div>
+            <h3>Agendamentos</h3>
+            <p>Organize horários e compromissos</p>
+          </a>
+          
+          <a routerLink="/servicos" class="feature-card fade-in-up">
+            <div class="feature-icon">✂️</div>
+            <h3>Serviços</h3>
+            <p>Catálogo de serviços oferecidos</p>
+          </a>
+          
+          <a routerLink="/funcionarios" class="feature-card fade-in-up">
+            <div class="feature-icon">👨💼</div>
+            <h3>Funcionários</h3>
+            <p>Equipe e profissionais</p>
+          </a>
+        </div>
+        
+        <div class="features-row">
+          <a routerLink="/produtos" class="feature-card fade-in-up">
+            <div class="feature-icon">🛍️</div>
+            <h3>Produtos</h3>
+            <p>Estoque e vendas</p>
+          </a>
+          
+          <a routerLink="/avaliacoes" class="feature-card fade-in-up">
+            <div class="feature-icon">⭐</div>
+            <h3>Avaliações</h3>
+            <p>Feedback dos clientes</p>
+          </a>
+          
+          <a routerLink="/feed" class="feature-card fade-in-up">
+            <div class="feature-icon">📱</div>
+            <h3>Feed</h3>
+            <p>Comunicação e novidades</p>
+          </a>
+        </div>
+      </ng-container>
       
-      <a routerLink="/agendamentos" class="feature-card fade-in-up">
-        <div class="feature-icon">📅</div>
-        <h3>Agendamentos</h3>
-        <p>Organize horários e compromissos</p>
-      </a>
-      
-      <a routerLink="/servicos" class="feature-card fade-in-up">
-        <div class="feature-icon">✂️</div>
-        <h3>Serviços</h3>
-        <p>Catálogo de serviços oferecidos</p>
-      </a>
-      
-      <a routerLink="/funcionarios" class="feature-card fade-in-up">
-        <div class="feature-icon">👨💼</div>
-        <h3>Funcionários</h3>
-        <p>Equipe e profissionais</p>
-      </a>
-      
-      <a routerLink="/produtos" class="feature-card fade-in-up">
-        <div class="feature-icon">🛍️</div>
-        <h3>Produtos</h3>
-        <p>Estoque e vendas</p>
-      </a>
+      <!-- Opções para Cliente -->
+      <ng-container *ngIf="!isAdmin()">
+        <div class="features-row">
+          <a routerLink="/agendamentos" class="feature-card fade-in-up">
+            <div class="feature-icon">📅</div>
+            <h3>Agendamentos</h3>
+            <p>Organize horários e compromissos</p>
+          </a>
+          
+          <a routerLink="/servicos" class="feature-card fade-in-up">
+            <div class="feature-icon">✂️</div>
+            <h3>Serviços</h3>
+            <p>Catálogo de serviços oferecidos</p>
+          </a>
+          
+          <a routerLink="/avaliacoes" class="feature-card fade-in-up">
+            <div class="feature-icon">⭐</div>
+            <h3>Avaliações</h3>
+            <p>Feedback dos clientes</p>
+          </a>
+          
+          <a routerLink="/feed" class="feature-card fade-in-up">
+            <div class="feature-icon">📱</div>
+            <h3>Feed</h3>
+            <p>Comunicação e novidades</p>
+          </a>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

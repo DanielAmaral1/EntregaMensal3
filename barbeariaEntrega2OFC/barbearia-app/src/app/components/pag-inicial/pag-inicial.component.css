@@ -23,11 +23,17 @@
   margin: 0 auto;
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.features-container {
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   margin-top: 3rem;
+}
+
+.features-row {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
 }
 
 .feature-card {
@@ -39,6 +45,11 @@
   transition: all 0.3s ease;
   border: 1px solid #4a5568;
   text-align: center;
+  width: 250px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .feature-card:hover {
@@ -68,7 +79,8 @@
     font-size: 2rem;
   }
   
-  .features-grid {
-    grid-template-columns: 1fr;
+  .features-row {
+    flex-direction: column;
+    align-items: center;
   }
 }

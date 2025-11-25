@@ -8,9 +8,9 @@
 }
 
 .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 2rem;
+  max-width: none;
+  margin: 0;
+  padding: 1rem 2rem 1rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,6 +21,7 @@
   font-weight: 700;
   color: #e2e8f0;
   margin: 0;
+  white-space: nowrap;
 }
 
 .tagline {
@@ -74,14 +75,15 @@
 
 @media (max-width: 768px) {
   .header-content {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     gap: 1rem;
     padding: 1rem;
   }
   
   .nav {
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-end;
   }
   
   .nav-link {

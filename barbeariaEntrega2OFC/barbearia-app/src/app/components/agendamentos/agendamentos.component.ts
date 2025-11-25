@@ -3,6 +3,7 @@ import { AgendamentoService } from '../../services/agendamento/agendamento.servi
 import { ClienteService } from '../../services/cliente/cliente.service';
 import { FuncionarioService } from '../../services/funcionario/funcionario.service';
 import { ServicoService } from '../../services/servico/servico.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { Agendamento } from '../../model/agendamentos/agendamento.model';
 import { Cliente } from '../../model/clientes/cliente.model';
 import { Funcionario } from '../../model/funcionarios/funcionario.model';
@@ -36,7 +37,8 @@ export class AgendamentosComponent implements OnInit {
     private agendamentoService: AgendamentoService,
     private clienteService: ClienteService,
     private funcionarioService: FuncionarioService,
-    private servicoService: ServicoService
+    private servicoService: ServicoService,
+    private authService: AuthService
   ) {}
   
   ngOnInit() {
@@ -44,6 +46,25 @@ export class AgendamentosComponent implements OnInit {
     this.carregarClientes();
     this.carregarFuncionarios();
     this.carregarServicos();
+    this.configurarClienteLogado();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
+  isCliente(): boolean {
+    return this.authService.isCliente();
+  }
+
+  configurarClienteLogado() {
+    if (this.isCliente()) {
+      const clienteId = this.authService.getClienteId();
+      const nomeCliente = this.authService.getUsername();
+      if (clienteId && nomeCliente) {
+        this.agendamento.cliente = { id_cliente: clienteId, nome: nomeCliente };
+      }
+    }
   }
 
   carregarAgendamentos() {
@@ -51,7 +72,14 @@ export class AgendamentosComponent implements OnInit {
     this.agendamentoService.getAll().subscribe({
       next: (agendamentos) => {
         console.log('Agendamentos carregados:', agendamentos);
-        this.agendamentos = agendamentos;
+        if (this.isCliente()) {
+          const clienteId = this.authService.getClienteId();
+          // Cliente vê apenas seus próprios agendamentos
+          this.agendamentos = agendamentos.filter(a => a.cliente?.id_cliente === clienteId);
+        } else {
+          // Admin vê todos os agendamentos
+          this.agendamentos = agendamentos;
+        }
       },
       error: (error) => {
         console.error('Erro ao carregar agendamentos:', error);
@@ -143,6 +171,7 @@ export class AgendamentosComponent implements OnInit {
   
   deletarAgendamento(agendamento: Agendamento) {
     if (confirm('Tem certeza que deseja deletar este agendamento?') && agendamento.id_agendamento) {
+      console.log('Tentando deletar agendamento:', agendamento.id_agendamento);
       this.agendamentoService.delete(agendamento.id_agendamento).subscribe({
         next: () => {
           alert('Agendamento deletado com sucesso!');
@@ -150,7 +179,8 @@ export class AgendamentosComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erro ao deletar agendamento:', error);
-          alert('Erro ao deletar agendamento!');
+          const mensagem = error.error?.message || error.message || 'Erro desconhecido ao deletar agendamento';
+          alert(mensagem);
         }
       });
     }
@@ -164,6 +194,7 @@ export class AgendamentosComponent implements OnInit {
     this.editandoAgendamento = false;
     this.agendamentoEditandoId = undefined;
     this.agendamento = { dataHora: '', observacoes: '', cliente: null as any, funcionario: null as any, servico: null as any };
+    this.configurarClienteLogado();
     this.mostrarFormulario = false;
   }
 }

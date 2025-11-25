@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-pag-inicial',
@@ -7,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./pag-inicial.component.css']
 })
 export class PagInicialComponent {
+
+  constructor(private authService: AuthService) {}
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 
 }

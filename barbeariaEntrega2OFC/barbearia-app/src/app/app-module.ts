@@ -14,6 +14,7 @@ import { ProdutosComponent } from './components/produtos/produtos.component';
 import { AvaliacoesComponent } from './components/avaliacoes/avaliacoes.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AuthInterceptor } from './core/auth/auth.interceptor';
     ProdutosComponent,
     AvaliacoesComponent,
     FeedComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

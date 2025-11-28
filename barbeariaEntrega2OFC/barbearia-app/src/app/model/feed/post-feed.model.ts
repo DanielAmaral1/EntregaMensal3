@@ -2,6 +2,7 @@ export interface PostFeed {
   id_post?: number;
   conteudo: string;
   dataPost?: string;
+  curtidas?: number;
   autor?: {
     id_cliente: number;
     nome?: string;

@@ -42,9 +42,9 @@ public class AvaliacaoService {
         
         if (avaliacao.getAgendamento() != null && avaliacao.getAgendamento().getId_agendamento() != null && avaliacao.getAgendamento().getId_agendamento() > 0) {
             avaliacao.setAgendamento(agendamentoRepository.findById(avaliacao.getAgendamento().getId_agendamento())
-                    .orElse(null));
+                    .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado")));
         } else {
-            avaliacao.setAgendamento(null);
+            throw new IllegalArgumentException("Agendamento é obrigatório e deve ser válido");
         }
         
         if (avaliacao.getFuncionario() != null && avaliacao.getFuncionario().getId_funcionario() != null && avaliacao.getFuncionario().getId_funcionario() > 0) {

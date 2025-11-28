@@ -68,6 +68,11 @@ public class PostFeedController {
         return ResponseEntity.ok(postFeedService.pesquisarPorConteudo(termo));
     }
 
+    @PostMapping("/{id}/curtir")
+    @PreAuthorize("hasAuthority('MASTER') or hasAuthority('CLIENTE')")
+    public ResponseEntity<PostFeed> curtirPost(@PathVariable Long id) {
+        return ResponseEntity.ok(postFeedService.curtirPost(id));
+    }
 
 }
 

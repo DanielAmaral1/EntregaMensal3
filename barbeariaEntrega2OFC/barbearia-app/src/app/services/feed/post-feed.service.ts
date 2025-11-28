@@ -42,6 +42,9 @@ export class PostFeedService {
     return this.http.get<PostFeed[]>(`${this.apiUrl}/pesquisar?termo=${termo}`);
   }
 
+  curtirPost(id: number): Observable<PostFeed> {
+    return this.http.post<PostFeed>(`${this.apiUrl}/${id}/curtir`, {});
+  }
 
 }
 

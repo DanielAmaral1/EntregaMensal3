@@ -18,7 +18,8 @@ export class FeedComponent implements OnInit {
   
   post: PostFeed = {
     conteudo: '',
-    autor: { id_cliente: 0, nome: '' }
+    autor: { id_cliente: 0, nome: '' },
+    curtidas: 0
   };
   
   posts: PostFeed[] = [];
@@ -38,6 +39,18 @@ export class FeedComponent implements OnInit {
     private clienteService: ClienteService,
     private authService: AuthService
   ) {}
+  
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+  
+  isCliente(): boolean {
+    return this.authService.isCliente();
+  }
+  
+  getClienteId(): number | null {
+    return this.authService.getClienteId();
+  }
   
   ngOnInit() {
     this.carregarPosts();
@@ -97,8 +110,19 @@ export class FeedComponent implements OnInit {
     this.postFeedService.findAll().subscribe({
       next: (posts) => {
         console.log('Posts carregados:', posts);
-        this.posts = posts;
-        this.postsFiltrados = posts;
+        // Garantir que todos os posts tenham curtidas inicializadas
+        this.posts = posts.map(p => ({
+          ...p,
+          curtidas: p.curtidas ?? 0
+        }));
+        // Ordenar por data (mais recentes primeiro)
+        this.posts.sort((a, b) => {
+          if (!a.dataPost && !b.dataPost) return 0;
+          if (!a.dataPost) return 1;
+          if (!b.dataPost) return -1;
+          return new Date(b.dataPost).getTime() - new Date(a.dataPost).getTime();
+        });
+        this.postsFiltrados = [...this.posts];
       },
       error: (error) => {
         console.error('Erro ao carregar posts:', error);
@@ -121,20 +145,21 @@ export class FeedComponent implements OnInit {
 
   pesquisar() {
     if (!this.termoPesquisa.trim()) {
-      this.postsFiltrados = this.posts;
+      this.postsFiltrados = [...this.posts];
       return;
     }
 
     const termo = this.termoPesquisa.toLowerCase();
     this.postsFiltrados = this.posts.filter(p => 
-      p.conteudo.toLowerCase().includes(termo) ||
-      p.autor?.nome?.toLowerCase().includes(termo)
+      p.conteudo?.toLowerCase().includes(termo) ||
+      p.autor?.nome?.toLowerCase().includes(termo) ||
+      p.autorNome?.toLowerCase().includes(termo)
     );
   }
 
   limparPesquisa() {
     this.termoPesquisa = '';
-    this.postsFiltrados = this.posts;
+    this.postsFiltrados = [...this.posts];
   }
 
   cadastrarPost() {
@@ -199,10 +224,39 @@ export class FeedComponent implements OnInit {
     this.resetForm();
   }
 
+  curtirPost(post: PostFeed) {
+    if (post.id_post) {
+      this.postFeedService.curtirPost(post.id_post).subscribe({
+        next: (postAtualizado) => {
+          // Garantir que curtidas está inicializado
+          if (postAtualizado.curtidas === null || postAtualizado.curtidas === undefined) {
+            postAtualizado.curtidas = 0;
+          }
+          // Atualiza o post na lista
+          const index = this.posts.findIndex(p => p.id_post === post.id_post);
+          if (index !== -1) {
+            this.posts[index] = postAtualizado;
+            // Atualiza também em postsFiltrados se o post estiver lá
+            const indexFiltrado = this.postsFiltrados.findIndex(p => p.id_post === post.id_post);
+            if (indexFiltrado !== -1) {
+              this.postsFiltrados[indexFiltrado] = postAtualizado;
+            } else {
+              this.postsFiltrados = [...this.posts];
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Erro ao curtir post:', error);
+          alert('Erro ao curtir post!');
+        }
+      });
+    }
+  }
+
   private resetForm() {
     this.editandoPost = false;
     this.postEditandoId = undefined;
-    this.post = { conteudo: '', autor: { id_cliente: 0, nome: '' } };
+    this.post = { conteudo: '', autor: { id_cliente: 0, nome: '' }, curtidas: 0 };
     this.configurarAutorLogado();
     this.limparErros();
     this.mostrarFormulario = false;

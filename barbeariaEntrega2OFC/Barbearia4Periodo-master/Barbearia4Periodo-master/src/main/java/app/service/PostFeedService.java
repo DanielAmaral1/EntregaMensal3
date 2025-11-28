@@ -83,6 +83,16 @@ public class PostFeedService {
         return postFeedRepository.findByConteudoContainingIgnoreCase(termo);
     }
 
+    public PostFeed curtirPost(Long id) {
+        PostFeed post = findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post não encontrado com id: " + id));
+        
+        if (post.getCurtidas() == null) {
+            post.setCurtidas(0);
+        }
+        post.setCurtidas(post.getCurtidas() + 1);
+        return postFeedRepository.save(post);
+    }
 
 }
 

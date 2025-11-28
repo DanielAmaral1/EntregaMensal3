@@ -1,8 +1,8 @@
 <div class="container">
   <div class="page-header">
-    <h2>📱 Feed Interativo</h2>
-    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
-      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Post' }}
+    <h2>🐦 Feed Social</h2>
+    <button class="btn btn-primary" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '✍️ Novo Post' }}
     </button>
   </div>
 
@@ -17,25 +17,25 @@
     </div>
   </div>
 
-  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
-    <h3>{{ editandoPost ? 'Editar Post' : 'Novo Post' }}</h3>
+  <div *ngIf="mostrarFormulario" class="card form-card tweet-composer fade-in-up">
+    <div class="composer-header">
+      <span class="avatar-large">👤</span>
+      <div class="composer-info">
+        <span class="composer-name">{{ post.autor?.nome || 'Usuário' }}</span>
+        <span class="composer-subtitle">O que está acontecendo?</span>
+      </div>
+    </div>
     <form (ngSubmit)="cadastrarPost()">
       <div class="form-group">
-        <label class="form-label">Postando como:</label>
-        <div class="readonly-field">{{ post.autor?.nome }}</div>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label" for="conteudo">Conteúdo:</label>
-        <textarea class="form-input" id="conteudo" name="conteudo" 
-                  [(ngModel)]="post.conteudo" rows="6" 
+        <textarea class="tweet-textarea" id="conteudo" name="conteudo" 
+                  [(ngModel)]="post.conteudo" rows="4" 
                   placeholder="O que você está pensando?" required></textarea>
         <div *ngIf="erros.conteudo" class="error-message">{{ erros.conteudo }}</div>
       </div>
       
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
-          {{ editandoPost ? '✏️ Atualizar' : '📤 Publicar' }} Post
+        <button type="submit" class="btn btn-primary btn-tweet">
+          {{ editandoPost ? '✏️ Atualizar' : '🐦 Tweetar' }}
         </button>
         <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
       </div>
@@ -43,26 +43,32 @@
   </div>
 
   <div class="feed-container">
-    <div *ngFor="let p of postsFiltrados" class="post-card card fade-in-up">
-      <div class="post-header">
-        <div class="post-author">
+    <div *ngFor="let p of postsFiltrados" class="tweet-card card fade-in-up">
+      <div class="tweet-header">
+        <div class="tweet-author">
           <span class="avatar">👤</span>
           <div class="author-info">
             <span class="author-name">{{ p.autor?.nome || p.autorNome || 'Anônimo' }}</span>
-            <span class="post-date">{{ p.dataPost | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span class="author-handle">@{{ (p.autor?.nome || p.autorNome || 'anonimo').toLowerCase().replace(/\s+/g, '') }}</span>
+            <span class="tweet-date">· {{ p.dataPost | date:'dd/MM/yyyy HH:mm' }}</span>
           </div>
         </div>
-        <div class="post-actions-menu">
-          <button class="btn-edit" (click)="editarPost(p)">✏️</button>
-          <button class="btn-delete" (click)="deletarPost(p)">🗑️</button>
+        <div class="tweet-actions-menu" *ngIf="isAdmin() || (isCliente() && p.autor?.id_cliente === getClienteId())">
+          <button class="btn-edit" (click)="editarPost(p)" title="Editar">✏️</button>
+          <button class="btn-delete" (click)="deletarPost(p)" title="Deletar">🗑️</button>
         </div>
       </div>
       
-      <div class="post-content">
+      <div class="tweet-content">
         <p>{{ p.conteudo }}</p>
       </div>
       
-
+      <div class="tweet-interactions">
+        <button class="btn-like" (click)="curtirPost(p)" title="Curtir">
+          <span class="like-icon">❤️</span>
+          <span class="like-count">{{ p.curtidas || 0 }}</span>
+        </button>
+      </div>
     </div>
   </div>
 

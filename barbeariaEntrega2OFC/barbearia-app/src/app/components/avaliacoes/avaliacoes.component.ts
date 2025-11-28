@@ -76,7 +76,7 @@ export class AvaliacoesComponent implements OnInit {
     this.avaliacaoService.findAll().subscribe({
       next: (avaliacoes) => {
         this.avaliacoes = avaliacoes;
-        this.avaliacoesFiltradas = avaliacoes;
+        this.avaliacoesFiltradas = [...avaliacoes];
       },
       error: (error) => console.error('Erro ao carregar avaliações:', error)
     });
@@ -125,7 +125,7 @@ export class AvaliacoesComponent implements OnInit {
 
   pesquisar() {
     if (!this.termoPesquisa.trim()) {
-      this.avaliacoesFiltradas = this.avaliacoes;
+      this.avaliacoesFiltradas = [...this.avaliacoes];
       return;
     }
 
@@ -133,13 +133,14 @@ export class AvaliacoesComponent implements OnInit {
     this.avaliacoesFiltradas = this.avaliacoes.filter(av => 
       av.comentario?.toLowerCase().includes(termo) ||
       av.cliente?.nome?.toLowerCase().includes(termo) ||
-      av.nota.toString().includes(termo)
+      av.funcionario?.nome?.toLowerCase().includes(termo) ||
+      av.nota?.toString().includes(termo)
     );
   }
 
   limparPesquisa() {
     this.termoPesquisa = '';
-    this.avaliacoesFiltradas = this.avaliacoes;
+    this.avaliacoesFiltradas = [...this.avaliacoes];
   }
 
   cadastrarAvaliacao() {
@@ -235,8 +236,15 @@ export class AvaliacoesComponent implements OnInit {
 
   private validarCliente(): boolean {
     if (this.isAdmin()) {
-      if (!this.avaliacao.cliente || !this.avaliacao.cliente.id_cliente) {
+      if (!this.avaliacao.cliente || !this.avaliacao.cliente.id_cliente || this.avaliacao.cliente.id_cliente === 0) {
         this.erros.cliente = 'Selecione um cliente!';
+        return false;
+      }
+    } else if (this.isCliente()) {
+      // Cliente logado deve ter cliente válido
+      const clienteId = this.authService.getClienteId();
+      if (!clienteId || !this.avaliacao.cliente || !this.avaliacao.cliente.id_cliente || this.avaliacao.cliente.id_cliente === 0) {
+        this.erros.cliente = 'Cliente inválido!';
         return false;
       }
     }
@@ -244,14 +252,17 @@ export class AvaliacoesComponent implements OnInit {
   }
 
   private validarAgendamento(): boolean {
-    if (!this.avaliacao.agendamento || !this.avaliacao.agendamento.id_agendamento) {
+    if (!this.avaliacao.agendamento || !this.avaliacao.agendamento.id_agendamento || this.avaliacao.agendamento.id_agendamento === 0) {
       this.erros.agendamento = 'Selecione um agendamento!';
       return false;
     }
     return true;
   }
 
-  getEstrelas(nota: number): string {
+  getEstrelas(nota: number | null | undefined): string {
+    if (!nota || nota < 1 || nota > 5) {
+      return '☆☆☆☆☆';
+    }
     return '⭐'.repeat(nota) + '☆'.repeat(5 - nota);
   }
 }
